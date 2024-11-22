@@ -1,8 +1,10 @@
 <template>
   <div class="HomePage">
     <div class="container2">
-      <h5 class="titlePage">Habits</h5>
-      <button id="toggleAddHabit" @click="toggleAddHabit" class="btn btn-primary">Add New Habits</button>
+      <h5 style="margin-left: 1.4rem;" class="titlePage">Habits</h5>
+      <button id="toggleAddHabit" @click="toggleAddHabit" class="btn btn-primary">
+        <i style="font-size: 1.2rem;" class="bi bi-plus"></i> Add NewHabits
+      </button>
     </div>
     <HabitList style="margin-top: 5rem;" :is-add-habit="visible" @close="updateVisible" />
   </div>

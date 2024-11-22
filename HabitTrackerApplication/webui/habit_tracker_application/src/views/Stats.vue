@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h2 class="titlePage">Statistics</h2>
+    <div class="container2">
+      <h5 style="margin-left: 1.4rem;" class="titlePage">Statistics</h5>
+    </div>
     <div class="containerStats">
       <h4>Statistics List Of Habits</h4>
       <div class="card habitListStats">
@@ -69,10 +71,6 @@ export default {
     HabitStats,
   },
   props: {
-    layout: {
-      type: String,
-      default: 'alternative'
-    },
     size: {
       type: Number,
       default: 120, // Çemberin boyutu
@@ -98,6 +96,7 @@ export default {
     const habitStore = useHabitStore();
     const habitStreak = ref(null);
     const habitName = ref(null);
+    const layout = ref("alternative");
 
     let arrayObjects = []; // Objeleri tutan array
 
@@ -148,6 +147,7 @@ export default {
       handleData,
       habitName,
       habitStreak,
+      layout,
     };
   },
 };
