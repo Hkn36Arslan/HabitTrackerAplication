@@ -59,11 +59,13 @@
       </div>
     </div>
     <!-- Alışkanlık Listesi -->
-    <div class="list">
-      <div v-for="habit in habits" :key="habit.id" class="habit-item">
-        <HabitItem :habit="habit" :is-edit-btn="true" :is-checkbox="true" :layout="layout" />
-      </div>
+   <!-- Alışkanlık Listesi -->
+<div class="list">
+    <div v-for="habit in habits" :key="habit.id" class="habit-item">
+      <HabitItem :habit="habit" :is-edit-btn="true" :is-checkbox="true" :layout="layout" />
     </div>
+</div>
+
   </div>
 </template>
 
