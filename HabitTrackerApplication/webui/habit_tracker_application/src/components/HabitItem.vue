@@ -72,38 +72,38 @@
           </div>
           <div class="group">
             <div class="card  name">
-              <h2 style="color: #00bad1;margin-left: 1rem;">{{ habit.name }}</h2>
+              <h2 style="font-family: 'Open Sans', sans-serif; margin-left: 1rem;">{{ habit.name }}</h2>
               <!-- props olarak alınan objenin özelliği -->
             </div>
-            <div class="card description" v-if="isDescription">
-            <!-- Açıklama -->
-            <p>
-              <i class="bi bi-card-text"></i>
-              {{ habit.description }}
-            </p>
+            <div style="" class="card description" v-if="isDescription">
+              <!-- Açıklama -->
+              <p>
+                <i class="bi bi-card-text"></i>
+                {{ habit.description }}
+              </p>
 
-            <!-- Hedef -->
-            <p>
-              <i class="bi bi-flag"></i>
-              <strong style="color: #28c76f;">Goal :</strong> {{ habit.goal }}
-            </p>
+              <!-- Hedef -->
+              <p>
+                <i class="bi bi-flag"></i>
+                <strong style="color: #28c76f;">Goal :</strong> {{ habit.goal }}
+              </p>
 
-            <!-- Başlangıç Tarihi -->
-            <p>
-              <i class="bi bi-calendar-event"></i>
-              <strong style="color: #ff4c51;">Start :</strong> {{ habit.startDate }}
-            </p>
-          </div>
+              <!-- Başlangıç Tarihi -->
+              <p>
+                <i class="bi bi-calendar-event"></i>
+                <strong style="color: #ff4c51;">Start :</strong> {{ habit.startDate }}
+              </p>
+            </div>
           </div>
           <div class="card edit" v-if="isEditButton">
-              <button class="btn btn-primary">
-                <!-- Butondaki router-link yapısına tıklayınca HabitDetail sayfasına yönlendirir. -->
-                <router-link :to="{ name: 'HabitDetail', params: { habitId: habit.id } }"
-                  style="text-decoration: none; color: white;">
-                  <i class="bi bi-eye"> Detail</i>
-                </router-link>
-              </button>
-            </div>
+            <button class="btn btn-primary">
+              <!-- Butondaki router-link yapısına tıklayınca HabitDetail sayfasına yönlendirir. -->
+              <router-link :to="{ name: 'HabitDetail', params: { habitId: habit.id } }" style="text-decoration: none;color: blueviolet; width: 100% ; height:50px ; display: flex;
+                align-items: center; justify-content: center;">
+                <i class="bi bi-eye"> Detail</i>
+              </router-link>
+            </button>
+          </div>
         </div>
         <div class="detail" v-if="isEditingLocal"> <!-- Düzenleme alanının görünürlüğünü ayarlanmıştır. -->
         </div>
@@ -185,11 +185,8 @@ export default {
       () => props.deleteStatus,
       (newValue) => {
         delete_Status.value = newValue;
-        console.log("Prop deleteStatus değişti:", newValue);
 
         if (delete_Status.value) {
-
-          console.log("deleteHabitFunction içerisine girildi");
 
           habitStore.deleteHabit(props.habit.id);
 

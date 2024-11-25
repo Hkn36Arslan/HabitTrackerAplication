@@ -2,7 +2,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Montserrat", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -183,25 +183,26 @@ body {
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   border: none !important;
-  background-color: transparent;
+  background-color: var(--primary-color);
   border-radius: 8px;
   padding: 1rem;
   padding-left: 2rem;
-  width: 85%;
+  width: 84%;
 }
 
 .habit-item {
   border: none !important;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
   border-radius: 8px;
   height: 400px;
   background-color: var(--bg-color);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--primary-color);
+  margin-bottom: 2rem;
+  box-shadow: 1 1 1 1 rgba(115, 103, 240, 0.3);
 }
 
 .habit-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.493), 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .card {
@@ -249,7 +250,7 @@ body {
   background-color: rgba(0, 0, 0, 0) !important;
   background-clip: padding-box;
   border-radius: 0.375rem;
-  border: 1px solid #8c8ca0a9 !important;
+  border: 1px solid #7267f063 !important;
   /* Varsayılan border */
   outline: none;
   /* Varsayılan outline kaldırıldı */
@@ -258,8 +259,7 @@ body {
 .form-control:focus {
   outline: none !important;
   box-shadow: none !important;
-
-  border: 2px solid #6610f2 !important;
+  border: 2px solid #7267f07a !important;
 }
 
 /* Placeholder için ek stil */
@@ -275,16 +275,29 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .btn-primary {
-  color: #fff !important;
-  background-color: #7367f0 !important;
-  border-color: #7367f0 !important;
+  color: var(--text-color) !important;
+  background-color: var(--card-text) !important;
+  border-color: #7267f0 !important;
   box-shadow: 0 0.125rem 0.375rem 0 rgba(115, 103, 240, 0.3);
   width: 12.5%;
   border: 0.375rem !important;
 }
 
 .btn-primary:hover {
-  background-color: #6610f2 !important;
+  background-color: #887ff3 !important;
+  color: white !important;
+}
+
+.btn-danger {
+  color: white !important;
+  background-color: #ff4c51;
+  box-shadow: 0 0.125rem 0.375rem 0 #ff4c51;
+  width: 12.5%;
+  border: 0.375rem !important;
+}
+
+.btn-danger:hover {
+  background-color: #f7444a;
 }
 
 .btn-success {
@@ -366,22 +379,164 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   background-color: var(--bg-color);
 }
 
+.custom-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100% !important;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+}
+
+.custom-modal-content {
+  background-color: var(--bg-color) !important;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  width: 70%;
+  max-width: 800px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ff4c51 !important;
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  color: var(--text-color) !important;
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+
+.note-pad {
+  background-color: #897ff394 !important;
+  border: none !important;
+  padding: 1rem;
+  position: relative;
+  background-size: 100% 55px !important;
+  background-position: top;
+  background-repeat: repeat;
+  width: 100%;
+  background-image: linear-gradient(to bottom, transparent 50%, #e8e8e8 50%);
+  height: auto !important;
+}
+
+.note-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  width: 100% !important;
+}
+
+.note-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 0.5rem;
+  background: red !important;
+  border: none !important;
+  border-radius: 5px;
+  position: relative;
+}
+
+.pin-icon {
+  color: #ff4c51;
+  font-size: 1.2rem;
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  transform: rotate(-30deg);
+}
+
+.note-text {
+  flex-grow: 1;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-size: 1.2rem;
+  background-color: #28c76f !important;
+  width: 100% !important;
+}
+
+.delete-btn {
+  color: white !important;
+  background-color: #ff4c51;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 5%;
+}
+
+.delete-btn:hover {
+  background-color: #f7444a;
+}
+
+.update-btn {
+  color: var(--text-color) !important;
+  background-color: var(--card-text) !important;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  width: 5%;
+  margin-right: 1rem;
+}
+
+.update-btn:hover {
+  background-color: #887ff3 !important;
+  color: white !important;
+}
+
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-start !important;
+  margin-top: 1rem;
+}
+
+.w-50 {
+  width: 50%;
+}
+
 .containerComponents {
-  background-color: var();
-  width: 80%;
+  background-color: transparent;
+  width: 83%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   margin-top: 5rem;
+  padding-left: 1.5rem;
+  padding-right: .2rem;
+
 }
 
 .containerComponents .containerHabitItem {
-  width: 70%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: row !important;
+  padding-right: 1rem;
+  box-shadow: 0 0.125rem 0.375rem 0 rgba(115, 103, 240, 0.3);
+  background-color: var(--bg-color);
+  border: none !important;
 }
 
 .detail {
@@ -416,15 +571,41 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 .butons {
   display: flex;
-  flex-direction: column !important;
+  flex-direction: row !important;
   justify-content: space-between;
   align-items: center;
   margin-top: 1rem;
-  width: 30%;
-  background-color: #28c76f;
-  gap: 2rem;
-  height: 300px;
+  width: 100%;
+  padding-left: 10rem;
+
 }
+
+.content {
+  background: var(--bg-color);
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  height: 310px;
+  color: var(--text-color);
+  gap: 1rem;
+}
+
+.contentButon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content h4 {
+  color: var(--text-color);
+}
+
+.content textarea {
+  height: 150px;
+  margin-bottom: 1rem !important;
+}
+
 
 /* ******************** Calendar Start ********************** */
 .calendar {
@@ -460,10 +641,10 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 /* *************************  HabitItem Start ********************** */
 .bi-eye {
-  display: block;
-  color: var(--text-color);
+  display: inline;
   width: 100%;
 }
+
 .bi-check2-square {
   color: var(--text-color);
 }
@@ -488,12 +669,10 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .default-layout .cardItem {
-  background-color: var(--primary-color) !important;
+  background-color: var(--bg-color) !important;
   width: 100%;
   margin: 0 auto;
-  color: crimson !important;
   border: none !important;
-  gap: 1rem !important;
 }
 
 .default-layout .checkbox {
@@ -527,7 +706,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 /* Checkbox işaretlendiğinde span gösterilsin */
-.default-layout .checkbox input[type="checkbox"]:checked + span {
+.default-layout .checkbox input[type="checkbox"]:checked+span {
   display: inline-block;
 }
 
@@ -578,7 +757,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 .default-layout .Item {
   background-color: var(--bg-color);
-  height: 400px;
+  height: 412px;
   width: 100%;
   display: flex !important;
   flex-direction: row !important;
@@ -623,7 +802,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .default-layout .Item .description p {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
 }
 
 .default-layout .Item .description i {
@@ -665,7 +844,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   color: white !important;
 }
 
-.default-layout .Item .edit:hover ~ .bi-bar-chart {
+.default-layout .Item .edit:hover~.bi-bar-chart {
   display: inline-block !important;
 }
 
@@ -1164,6 +1343,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 /* Yukarı-aşağı hareket için animasyon tanımla */
 @keyframes bounce {
+
   0%,
   100% {
     transform: translateY(-50%) translateY(0);
@@ -1333,6 +1513,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 /* ************************* Stats Page End ********************** */
 
 @media (min-width: 1400px) {
+
   .container,
   .container-lg,
   .container-md,

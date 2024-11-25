@@ -4,6 +4,7 @@ export const useHabitStore = defineStore('habitStore', {
     state: () => ({
         habits: JSON.parse(localStorage.getItem('habits')) || [], // Alışkanlıklar
         checkedDates: JSON.parse(localStorage.getItem('checkedDates')) || {}, // İşaretli tarihleri tutan obje
+        notes: JSON.parse(localStorage.getItem("habitNotes")) || {}, // Alışkanlıklara ait notlar
     }),
 
     actions: {
@@ -25,6 +26,7 @@ export const useHabitStore = defineStore('habitStore', {
             localStorage.setItem('habits', JSON.stringify(this.habits));
         },
 
+
         // Alışkanlık silme metodu
         deleteHabit(id) {
             this.habits = this.habits.filter(habit => habit.id !== id);
@@ -45,7 +47,33 @@ export const useHabitStore = defineStore('habitStore', {
             const loadedHabits = JSON.parse(localStorage.getItem('habits')) || [];
             this.habits = loadedHabits;
         },
+        // Not yönetimi için metotlar
+        getNotesByHabitId(habitId) {
+            return this.notes[habitId] || [];
+        },
 
+        addNote(habitId, note) {
+            if (!this.notes[habitId]) {
+                this.notes[habitId] = [];
+            }
+            this.notes[habitId].push(note);
+            this.saveNotes();
+        },
+
+        deleteNote(habitId, noteIndex) {
+            if (this.notes[habitId]) {
+                this.notes[habitId].splice(noteIndex, 1);
+                this.saveNotes();
+            }
+        },
+
+        saveNotes() {
+            localStorage.setItem("habitNotes", JSON.stringify(this.notes));
+        },
+
+        loadNotes() {
+            this.notes = JSON.parse(localStorage.getItem("habitNotes")) || {};
+        },
         // Checkbox işaret durumu kaydetme metodu (Bugün için tarih bazlı kaydetme)
         saveCheckedState(habitId, value) {
             const today = new Date().toISOString().split('T')[0]; // Bugünün tarihi YYYY-MM-DD formatında
