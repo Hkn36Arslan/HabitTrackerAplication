@@ -9,6 +9,23 @@
       <div class="card containerHabitItem">
         <!-- Notes Modal -->
         <div v-if="isNote" class="modal-backdrop custom-modal">
+          <!-- ***************************************************** -->
+          <div v-if="isEditingNote" class="modal-backdrop custom-modal">
+            <div style="width: 30% !important;" class="modal-content custom-modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Update Note</h5>
+                <button class="closeBtn" type="button" @click="isEditingNote = false" aria-label="Close">X</button>
+              </div>
+              <div class="modal-body">
+                <textarea v-model="editNoteText" placeholder="Update your note..." class="form-control"></textarea>
+              </div>
+              <div class="modal-footer">
+                <button @click="saveEditedNote" style="margin-right: 1rem;" class="btn btn-primary">Save</button>
+                <button @click="isEditingNote = false" class="btn btn-secondary">Cancel</button>
+              </div>
+            </div>
+          </div>
+          <!-- ***************************************************** -->
           <div class="modal-content custom-modal-content">
             <div class="modal-header">
               <h5 class="modal-title">Notes for {{ selectedHabit.name }}</h5>
@@ -17,14 +34,15 @@
             <div class="modal-body">
               <div class="note-pad">
                 <ul class="list-group note-list">
-                  <li v-if="emptyList">
+                  <li v-if="emptyList" class="list-group-item note-item">
                     <i class="bi bi-pin-angle-fill pin-icon"></i>
                     <span class="note-text">Not yok.</span>
                   </li>
                   <li v-for="(note, index) in notes" :key="index" class="list-group-item note-item">
                     <i class="bi bi-pin-angle-fill pin-icon"></i>
                     <span class="note-text">{{ note }}</span>
-                    <button @click="updateNote(index)" class="btn btn-primary btn-sm update-btn">
+                    <button @click="toggleEditNote(index)" style="width: 5%; font-size: 1rem;margin-right: .5rem;"
+                      class="btn btn-primary btn-sm ">
                       <i class="bi bi-pencil"></i>
                     </button>
                     <button @click="deleteNote(index)" class="btn btn-danger btn-sm delete-btn">
@@ -103,6 +121,9 @@ export default {
     const newNote = ref("");
     const notes = ref([]);
     const emptyList = ref(false);
+    const isEditingNote = ref(false); // Düzenleme modunu kontrol eder
+    const editNoteIndex = ref(null); // Düzenlenen notun indeksi
+    const editNoteText = ref(""); // Düzenlenecek notun yeni içeriği
 
     const toggleNote = () => {
       isNote.value = !isNote.value;
@@ -132,6 +153,21 @@ export default {
       }
       else {
         alert("Lütfen text alanını doldurun.");
+      }
+    };
+    const toggleEditNote = (index) => {
+      isEditingNote.value = true;
+      editNoteIndex.value = index;
+      editNoteText.value = notes.value[index];
+    };
+
+    const saveEditedNote = () => {
+      if (editNoteIndex.value !== null && editNoteText.value.trim() !== "") {
+        habitStore.updateNote(props.habitId, editNoteIndex.value, editNoteText.value.trim());
+        notes.value = habitStore.getNotesByHabitId(props.habitId);
+        isEditingNote.value = false;
+        editNoteIndex.value = null;
+        editNoteText.value = "";
       }
     };
 
@@ -216,6 +252,11 @@ export default {
       close,
       emptyList,
       emptyControl,
+      isEditingNote,
+      editNoteIndex,
+      editNoteText,
+      toggleEditNote,
+      saveEditedNote,
     };
   },
 };

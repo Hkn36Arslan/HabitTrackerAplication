@@ -60,6 +60,13 @@ export const useHabitStore = defineStore('habitStore', {
             this.saveNotes();
         },
 
+        // Notları güncelleme
+        updateNote(habitId, noteIndex, updatedNote) {
+            if (this.notes[habitId] && this.notes[habitId][noteIndex] !== undefined) {
+                this.notes[habitId][noteIndex] = updatedNote;
+                this.saveNotes();
+            }
+        },
         deleteNote(habitId, noteIndex) {
             if (this.notes[habitId]) {
                 this.notes[habitId].splice(noteIndex, 1);
