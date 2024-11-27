@@ -98,8 +98,7 @@
           <div class="card edit" v-if="isEditButton">
             <button class="btn btn-primary">
               <!-- Butondaki router-link yapısına tıklayınca HabitDetail sayfasına yönlendirir. -->
-              <router-link :to="{ name: 'HabitDetail', params: { habitId: habit.id } }" style="text-decoration: none;color: blueviolet; width: 100% ; height:50px ; display: flex;
-                align-items: center; justify-content: center;">
+              <router-link :to="{ name: 'HabitDetail', params: { habitId: habit.id } }" class="router">
                 <i class="bi bi-eye"> Detail</i>
               </router-link>
             </button>
@@ -154,7 +153,7 @@ export default {
       return this.layout === 'alternative' ? 'alternative-layout' : 'default-layout';
     },
   },
-  emits: ["close", "delete"],
+  emits: ["close", "delete", "checkboxToggled"],
 
   setup(props, { emit }) { // emit'i parametre olarak ekleyin
     const habitStore = useHabitStore();
@@ -262,17 +261,24 @@ export default {
     // habitin checkbox işaretlenmesini localStorage kaydetmek için habitStore gerekli  id ve değerler gönderiliyor.
     const saveCheckedState = () => {
       const currentCheckedState = habitStore.loadCheckedState(`habit-${props.habit.id}-checked`);
-      // Mevcut durum ile değiştirilecek durumu karşılaştırın değer aynı değilse işlem yap.
+      console.log("result:", habitStore.loadCheckedDates(props.habit.id));
+
       if (checked.value !== currentCheckedState) {
+        // Check edilen durumu kaydet
         habitStore.saveCheckedState(`habit-${props.habit.id}-checked`, checked.value);
+
         if (checked.value) {
-          habitStore.saveCheckedDate(props.habit.id, today); // checkbox ı işaretlenen habitin ıd si ve bugünün tarihi habitStorage e gönderilerek işaretlendiği tarih localStorage e kaydedilir.
-          emit('checkboxToggled', true); //emit yapıları, Vue.js'te bir bileşenden dışarıya olay göndermek için kullanılır. emit kullanarak, üst bileşenlere veya Vue Router gibi başka bileşenlere belirli bir durumu veya olayı bildirebiliriz.
+          // Eğer checkbox işaretlenmişse, tarihi ekle
+          habitStore.saveCheckedDate(props.habit.id, today);
+          emit('checkboxToggled', true); // Durum değişikliği bildirimi
         } else {
-          emit('checkboxToggled', checked);
+          // Checkbox işareti kaldırılmışsa, tarihi sil
+          habitStore.deleteCheckedDate(props.habit.id, today);
+          emit('checkboxToggled', false); // Durum değişikliği bildirimi
         }
       }
     };
+
 
     const loadCheckedState = () => {
       checked.value = habitStore.loadCheckedState(`habit-${props.habit.id}-checked`);
@@ -280,6 +286,7 @@ export default {
 
     onMounted(() => {
       loadCheckedState();
+      saveCheckedState();
     });
 
     return {

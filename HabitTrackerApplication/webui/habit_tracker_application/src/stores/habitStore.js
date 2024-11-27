@@ -4,7 +4,7 @@ export const useHabitStore = defineStore('habitStore', {
     state: () => ({
         habits: JSON.parse(localStorage.getItem('habits')) || [], // Alışkanlıklar
         checkedDates: JSON.parse(localStorage.getItem('checkedDates')) || {}, // İşaretli tarihleri tutan obje
-        notes: JSON.parse(localStorage.getItem("habitNotes")) || {}, // Alışkanlıklara ait notlar
+        notes: JSON.parse(localStorage.getItem('habitNotes')) || {}, // Alışkanlıklara ait notlar
     }),
 
     actions: {
@@ -26,7 +26,6 @@ export const useHabitStore = defineStore('habitStore', {
             localStorage.setItem('habits', JSON.stringify(this.habits));
         },
 
-
         // Alışkanlık silme metodu
         deleteHabit(id) {
             this.habits = this.habits.filter(habit => habit.id !== id);
@@ -47,6 +46,7 @@ export const useHabitStore = defineStore('habitStore', {
             const loadedHabits = JSON.parse(localStorage.getItem('habits')) || [];
             this.habits = loadedHabits;
         },
+
         // Not yönetimi için metotlar
         getNotesByHabitId(habitId) {
             return this.notes[habitId] || [];
@@ -67,6 +67,7 @@ export const useHabitStore = defineStore('habitStore', {
                 this.saveNotes();
             }
         },
+
         deleteNote(habitId, noteIndex) {
             if (this.notes[habitId]) {
                 this.notes[habitId].splice(noteIndex, 1);
@@ -81,11 +82,26 @@ export const useHabitStore = defineStore('habitStore', {
         loadNotes() {
             this.notes = JSON.parse(localStorage.getItem("habitNotes")) || {};
         },
+
         // Checkbox işaret durumu kaydetme metodu (Bugün için tarih bazlı kaydetme)
         saveCheckedState(habitId, value) {
             const today = new Date().toISOString().split('T')[0]; // Bugünün tarihi YYYY-MM-DD formatında
             const key = `habit-${habitId}-${today}`; // Özgün anahtar (habitId + tarih)
             localStorage.setItem(key, value); // checkbox durumunu kaydediyoruz
+        },
+
+        deleteCheckedDate(habitId, date) {
+            const checkedDates = JSON.parse(localStorage.getItem('checkedDates')) || {}
+
+            if (checkedDates[habitId]) {
+                // Belirli bir habit id'si altında, belirtilen tarihi sil
+                const index = checkedDates[habitId].indexOf(date);
+                if (index !== -1) {
+                    checkedDates[habitId].splice(index, 1);
+                    // Güncellenmiş checkedDates'i localStorage'a kaydet
+                    localStorage.setItem('checkedDates', JSON.stringify(checkedDates));
+                }
+            }
         },
 
         // Checkbox işaret durumu yükleme metodu (Bugün için)
@@ -96,7 +112,6 @@ export const useHabitStore = defineStore('habitStore', {
             return savedChecked === 'true'; // true/false dönüşümü
         },
 
-        // Checkbox işaretlenme tarihini localStorage kaydeder
         // Checkbox işaretlenme tarihini kaydet
         saveCheckedDate(habitId, date) {
             if (!this.checkedDates[habitId]) {
@@ -135,7 +150,6 @@ export const useHabitStore = defineStore('habitStore', {
             const totalDays = habitDates.size;
             return totalDays > 0 ? (totalDays / 30) * 100 : 0; // Örneğin, son 30 gün üzerinden hesaplama yapıyoruz
         },
-
 
         // Günlük checkbox durumunu sıfırlama ve güncelleme
         resetCheckedState() {

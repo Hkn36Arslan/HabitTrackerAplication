@@ -5,82 +5,90 @@
       <button style="width:12.5%;" @click="deleteHabit" class="btn btn-danger "><i class="bi bi-trash3"></i>
         Delete Habit </button>
     </div>
+    <div v-if="alertSuccess" class="alert alert-success" role="alert" style=" position: absolute; z-index: 1000;">
+      added successfully
+    </div>
+    <div v-if="alertDanger" class="alert alert-danger" role="alert" style=" position: absolute;  z-index: 1000;">
+      Please fill in the text field !
+    </div>
+
     <div class="containerComponents">
-      <div class="card containerHabitItem">
-        <!-- Notes Modal -->
-        <div v-if="isNote" class="modal-backdrop custom-modal">
-          <!-- ***************************************************** -->
-          <div v-if="isEditingNote" class="modal-backdrop custom-modal">
-            <div style="width: 30% !important;" class="modal-content custom-modal-content">
+      <div class="containerHabit">
+        <div class="card containerHabitItem">
+          <!-- Notes Modal -->
+          <div v-if="isNote" class="modal-backdrop custom-modal">
+            <!-- ***************************************************** -->
+            <div v-if="isEditingNote" class="modal-backdrop custom-modal">
+              <div style="width: 30% !important;" class="modal-content custom-modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Update Note</h5>
+                  <button class="closeBtn" type="button" @click="isEditingNote = false" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                  <textarea v-model="editNoteText" placeholder="Update your note..." class="form-control"></textarea>
+                </div>
+                <div class="modal-footer">
+                  <button @click="saveEditedNote" style="margin-right: 1rem;" class="btn btn-primary">Save</button>
+                  <button @click="isEditingNote = false" class="btn btn-secondary">Cancel</button>
+                </div>
+              </div>
+            </div>
+            <!-- ***************************************************** -->
+            <div class="modal-content custom-modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Update Note</h5>
-                <button class="closeBtn" type="button" @click="isEditingNote = false" aria-label="Close">X</button>
+                <h5 class="modal-title">Notes for {{ selectedHabit.name }}</h5>
+                <button class="closeBtn" type="button" @click="close" aria-label="Close">X</button>
               </div>
               <div class="modal-body">
-                <textarea v-model="editNoteText" placeholder="Update your note..." class="form-control"></textarea>
+                <div class="note-pad">
+                  <ul class="list-group note-list">
+                    <li v-if="emptyList" class="list-group-item note-item">
+                      <i class="bi bi-pin-angle-fill pin-icon"></i>
+                      <span class="note-text">Not yok.</span>
+                    </li>
+                    <li v-for="(note, index) in notes" :key="index" class="list-group-item note-item">
+                      <i class="bi bi-pin-angle-fill pin-icon"></i>
+                      <span class="note-text">{{ note }}</span>
+                      <button @click="toggleEditNote(index)" style="width: 5%; font-size: 1rem;margin-right: .5rem;"
+                        class="btn btn-primary btn-sm ">
+                        <i class="bi bi-pencil"></i>
+                      </button>
+                      <button @click="deleteNote(index)" class="btn btn-danger btn-sm delete-btn">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
               <div class="modal-footer">
-                <button @click="saveEditedNote" style="margin-right: 1rem;" class="btn btn-primary">Save</button>
-                <button @click="isEditingNote = false" class="btn btn-secondary">Cancel</button>
+                <button @click="close" class="btn btn-secondary w-25">Close</button>
               </div>
             </div>
           </div>
-          <!-- ***************************************************** -->
-          <div class="modal-content custom-modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">Notes for {{ selectedHabit.name }}</h5>
-              <button class="closeBtn" type="button" @click="close" aria-label="Close">X</button>
-            </div>
-            <div class="modal-body">
-              <div class="note-pad">
-                <ul class="list-group note-list">
-                  <li v-if="emptyList" class="list-group-item note-item">
-                    <i class="bi bi-pin-angle-fill pin-icon"></i>
-                    <span class="note-text">Not yok.</span>
-                  </li>
-                  <li v-for="(note, index) in notes" :key="index" class="list-group-item note-item">
-                    <i class="bi bi-pin-angle-fill pin-icon"></i>
-                    <span class="note-text">{{ note }}</span>
-                    <button @click="toggleEditNote(index)" style="width: 5%; font-size: 1rem;margin-right: .5rem;"
-                      class="btn btn-primary btn-sm ">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                    <button @click="deleteNote(index)" class="btn btn-danger btn-sm delete-btn">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button @click="close" class="btn btn-secondary w-25">Close</button>
-            </div>
-          </div>
+
+          <HabitItem style="width: 80% !important;" v-if="selectedHabit" :habit="selectedHabit" :isEditing="true"
+            :isEditBtn="false" :isCheckbox="false" @checkboxToggled="updateCheckedDates" :layout="layout"
+            :is-update-visible-props="isUpdateVisible" @close="updateVisible" :delete-status="deleteStatus"
+            @delete="updateDelete" />
+          <button style="width:25%; height: 50px;" @click="openUpdate" class="btn btn-primary "><i
+              class="bi bi-arrow-repeat"></i>
+            Update</button>
+          <!-- update,cancel ve delete butonları -->
         </div>
-
-
-        <HabitItem style="width: 40% !important;" v-if="selectedHabit" :habit="selectedHabit" :isEditing="true"
-          :isEditBtn="false" :isCheckbox="false" @checkboxToggled="updateCheckedDates" :layout="layout"
-          :is-update-visible-props="isUpdateVisible" @close="updateVisible" :delete-status="deleteStatus"
-          @delete="updateDelete" />
-        <!-- update,cancel ve delete butonları -->
-        <div class="butons">
+        <div class="card containerHabitItem" style=" height: 426px;">
           <div class="content">
             <h4>Manage Notes for habit</h4>
             <textarea v-model="newNote" placeholder="Enter your note here..." class="form-control mb-2"></textarea>
             <div class="contentButon">
-              <button style="width: 48%;" @click="addNote" class="btn btn-primary mb-2">
-                <i style="font-size: 1.3rem;" class="bi bi-plus"></i>
+              <button style="width: 40%;" @click="addNote" class="btn btn-primary mb-2">
+                <i style="font-size: 1.3rem; margin-top: 2rem !important;" class="bi bi-plus"></i>
                 Add Note</button>
-              <button style="width: 48%; display: flex; align-items: center; justify-content: center;"
-                @click="toggleNote" class="btn btn-primary mb-2">
-                <i style="font-size: 1.2rem; margin-right: .5rem;" class="bi bi-list-task"></i> Manage Notes
-              </button>
             </div>
           </div>
-          <button style="width:12%; height: 60px;" @click="openUpdate" class="btn btn-primary "><i
-              class="bi bi-arrow-repeat"></i>
-            Update</button>
+          <button style="width:25%; height: 50px; display: flex; align-items: center; justify-content: center;"
+            @click="toggleNote" class="btn btn-primary mb-2">
+            <i style="font-size: 1.2rem; margin-right: .5rem;" class="bi bi-list-task"></i> Manage Notes
+          </button>
         </div>
       </div>
       <HabitCalendar v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" />
@@ -124,6 +132,9 @@ export default {
     const isEditingNote = ref(false); // Düzenleme modunu kontrol eder
     const editNoteIndex = ref(null); // Düzenlenen notun indeksi
     const editNoteText = ref(""); // Düzenlenecek notun yeni içeriği
+    const alertSuccess = ref(false);
+    const alertDanger = ref(false);
+
 
     const toggleNote = () => {
       isNote.value = !isNote.value;
@@ -150,9 +161,21 @@ export default {
         newNote.value = "";
         emptyList.value = !emptyList.value;
 
+        alertSuccessFunction();
+
+        setTimeout(() => {
+          alertSuccessFunction();
+        }, 1500);
+
+
       }
       else {
-        alert("Lütfen text alanını doldurun.");
+        alertDangerFunction();
+
+        setTimeout(() => {
+          alertDangerFunction();
+        }, 1500);
+
       }
     };
     const toggleEditNote = (index) => {
@@ -208,6 +231,14 @@ export default {
       deleteStatus.value = !value;
     };
 
+    const alertSuccessFunction = () => {
+      alertSuccess.value = !alertSuccess.value;
+    };
+
+    const alertDangerFunction = () => {
+      alertDanger.value = !alertDanger.value;
+    };
+
     onMounted(() => {
       const habitId = Number(route.params.habitId);
       selectedHabit.value = habitStore.getHabitById(habitId);
@@ -257,6 +288,10 @@ export default {
       editNoteText,
       toggleEditNote,
       saveEditedNote,
+      alertSuccess,
+      alertDanger,
+      alertSuccessFunction,
+      alertDangerFunction,
     };
   },
 };

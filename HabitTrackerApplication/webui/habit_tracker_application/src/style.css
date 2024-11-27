@@ -13,6 +13,7 @@ body {
   padding-top: 5rem !important;
   overflow-y: scroll;
   overflow-x: hidden;
+
 }
 
 /* Firefox için */
@@ -502,7 +503,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .containerComponents {
-  background-color: transparent;
+  background-color: var(--bg-color);
   width: 83%;
   display: flex;
   flex-direction: column;
@@ -514,7 +515,17 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 }
 
-.containerComponents .containerHabitItem {
+.containerHabit {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: transparent;
+  width: 100%;
+  gap: 2rem;
+}
+
+.containerComponents .containerHabit .containerHabitItem {
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -524,6 +535,17 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   box-shadow: 0 0.125rem 0.375rem 0 rgba(115, 103, 240, 0.3);
   background-color: var(--bg-color);
   border: none !important;
+}
+
+.content {
+  background: transparent;
+  padding: 20px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  height: 310px;
+  color: var(--text-color);
+  margin-top: 2rem;
 }
 
 .detail {
@@ -556,28 +578,6 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   display: block !important;
 }
 
-.butons {
-  display: flex;
-  flex-direction: row !important;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-  width: 100%;
-  padding-left: 10rem;
-
-}
-
-.content {
-  background: var(--bg-color);
-  padding: 20px;
-  border-radius: 8px;
-  width: 100%;
-  max-width: 500px;
-  height: 310px;
-  color: var(--text-color);
-  gap: 1rem;
-}
-
 .contentButon {
   display: flex;
   align-items: center;
@@ -605,6 +605,27 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   margin-top: 2rem;
   box-shadow: 0 0.125rem 0.375rem 0 rgba(114, 103, 240, 0.507);
   background-color: var(--bg-color) !important;
+  /* background-color: #1fd671fa !important; */
+}
+
+.custom-style {
+  position: relative;
+}
+
+.custom-style::before {
+  content: " ✔ Completed";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  background-color: #28c76f9c;
+  padding: .5rem 2rem;
+  position: absolute !important;
+  z-index: 1000;
+  top: 40%;
+  left: 15%;
+  border-radius: 8px;
 }
 
 .calendar h3 {
@@ -642,6 +663,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 .fc-toolbar-title {
   color: var(--text-color);
+  margin-left: 1rem !important;
 
 }
 
@@ -681,6 +703,10 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 .fc-daygrid-day-number {
   font-size: 1em !important;
   color: var(--text-color) !important;
+  background-color: var(--primary-color);
+  width: 30px;
+  text-align: center;
+  border-radius: 100%;
 }
 
 .fc table.fc-scrollgrid {
@@ -715,6 +741,17 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 /* *************************  HabitItem Start ********************** */
+.router {
+  text-decoration: none;
+  color: var(--text-color);
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
 .bi-eye {
   display: inline;
   width: 100%;
@@ -919,9 +956,6 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   color: white !important;
 }
 
-.default-layout .Item .edit:hover~.bi-bar-chart {
-  display: inline-block !important;
-}
 
 /* *************************  HabitItem End ********************** */
 
