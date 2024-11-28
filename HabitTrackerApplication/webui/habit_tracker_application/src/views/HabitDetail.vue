@@ -10,6 +10,7 @@
     </div>
     <div v-if="alertDanger" class="alert alert-danger" role="alert" style=" position: absolute;  z-index: 1000;">
       Please fill in the text field !
+      {{ deleteMessage }}
     </div>
 
     <div class="containerComponents">
@@ -17,6 +18,14 @@
         <div class="card containerHabitItem">
           <!-- Notes Modal -->
           <div v-if="isNote" class="modal-backdrop custom-modal">
+            <div v-if="alertDangerDelete" class="alert alert-danger" role="alert"
+              style=" position: absolute;  z-index: 1000;">
+              Note Deleted
+            </div>
+            <div v-if="alertSuccessSave" class="alert alert-success" role="alert"
+              style=" position: absolute; z-index: 1000;">
+              Saved Successfully
+            </div>
             <!-- ***************************************************** -->
             <div v-if="isEditingNote" class="modal-backdrop custom-modal">
               <div style="width: 30% !important;" class="modal-content custom-modal-content">
@@ -70,8 +79,8 @@
             :isEditBtn="false" :isCheckbox="false" @checkboxToggled="updateCheckedDates" :layout="layout"
             :is-update-visible-props="isUpdateVisible" @close="updateVisible" :delete-status="deleteStatus"
             @delete="updateDelete" />
-          <button style="width:25%; height: 50px;" @click="openUpdate" class="btn btn-primary "><i
-              class="bi bi-arrow-repeat"></i>
+          <button style="width:25%; height: 50px;" @click="openUpdate" class="btn btn-primary ">
+            <i class="bi bi-arrow-repeat"></i>
             Update</button>
           <!-- update,cancel ve delete butonları -->
         </div>
@@ -134,7 +143,9 @@ export default {
     const editNoteText = ref(""); // Düzenlenecek notun yeni içeriği
     const alertSuccess = ref(false);
     const alertDanger = ref(false);
-
+    const alertSuccessSave = ref(false);
+    const alertDangerDelete = ref(false);
+    const deleteMessage = ref("");
 
     const toggleNote = () => {
       isNote.value = !isNote.value;
@@ -165,7 +176,7 @@ export default {
 
         setTimeout(() => {
           alertSuccessFunction();
-        }, 1500);
+        }, 1000);
 
 
       }
@@ -174,7 +185,7 @@ export default {
 
         setTimeout(() => {
           alertDangerFunction();
-        }, 1500);
+        }, 1000);
 
       }
     };
@@ -192,6 +203,13 @@ export default {
         editNoteIndex.value = null;
         editNoteText.value = "";
       }
+
+      alertSuccessSaveFunction();
+
+      setTimeout(() => {
+        alertSuccessSaveFunction();
+      }, 1000);
+
     };
 
     const deleteNote = (index) => {
@@ -200,6 +218,11 @@ export default {
       if (emptyControl()) {
         emptyList.value = true;
       }
+      alertDangerDeleteFunction();
+
+      setTimeout(() => {
+        alertDangerDeleteFunction();
+      }, 1000);
     };
     const close = () => {
       isNote.value = !isNote.value;
@@ -225,6 +248,14 @@ export default {
 
     const deleteHabit = () => {
       deleteStatus.value = !deleteStatus.value;
+      deleteMessage.value = "Deleted !";
+      alertDangerFunction();
+
+      setTimeout(() => {
+        alertDangerFunction();
+        deleteMessage.value = "";
+      }, 1000);
+
     };
 
     const updateDelete = (value) => {
@@ -237,6 +268,13 @@ export default {
 
     const alertDangerFunction = () => {
       alertDanger.value = !alertDanger.value;
+    };
+    const alertSuccessSaveFunction = () => {
+      alertSuccessSave.value = !alertSuccessSave.value;
+    };
+
+    const alertDangerDeleteFunction = () => {
+      alertDangerDelete.value = !alertDangerDelete.value;
     };
 
     onMounted(() => {
@@ -290,8 +328,9 @@ export default {
       saveEditedNote,
       alertSuccess,
       alertDanger,
-      alertSuccessFunction,
-      alertDangerFunction,
+      alertSuccessSave,
+      alertDangerDelete,
+      deleteMessage,
     };
   },
 };

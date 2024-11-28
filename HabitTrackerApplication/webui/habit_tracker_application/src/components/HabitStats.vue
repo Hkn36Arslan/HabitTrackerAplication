@@ -11,7 +11,7 @@
               <div class="card-body">
                 <h4 class="card-title">Total Number Of Days <span style="color: #f72d66; font-size: 2rem;"> >{{
                   totalDaysCompleted
-                    }}</span>
+                }}</span>
                 </h4>
                 <!-- 30 dilimlik bar -->
                 <div class="progress-bar-container ">

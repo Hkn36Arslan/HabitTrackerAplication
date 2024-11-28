@@ -19,6 +19,7 @@
     "bootstrap-icons": "^1.11.3",
     "chart.js": "^4.4.6",
     "core-js": "^3.8.3",
+    "flatpickr": "^4.6.13",
     "fullcalendar": "^3.10.5",
     "highcharts": "^11.4.8",
     "highcharts-vue": "^2.0.1",

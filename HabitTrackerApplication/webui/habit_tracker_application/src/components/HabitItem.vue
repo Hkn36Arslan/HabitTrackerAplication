@@ -50,6 +50,7 @@
             </div>
 
             <button type="submit" class="btn btn-success me-3 data-submit waves-effect waves-light">
+              <i class="bi bi-arrow-repeat"></i>
               Update
             </button>
             <button @click="openUpdate" style="width: 48%;" type="reset" class="btn btn-secondary waves-effect">
@@ -169,7 +170,6 @@ export default {
     const habitStartDateError = ref("");
     const successMessage = ref("");
     const errorMessage = ref("");
-
     const delete_Status = ref(props.deleteStatus);
 
     console.log("props", delete_Status.value);
@@ -197,6 +197,7 @@ export default {
 
       }
     );
+
 
     // Bugünkü tarihin işaretli olup olmadığını kontrol eden computed property
     const isCheckedToday = computed(() => {
@@ -232,7 +233,7 @@ export default {
 
       if (isValid) {
         saveEdit();
-        successMessage.value = "Habit added successfully!";
+        successMessage.value = "Habit updated successfully!";
         setTimeout(() => {
           successMessage.value = "";
         }, 1800);
