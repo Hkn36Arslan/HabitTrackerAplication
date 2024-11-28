@@ -7,7 +7,7 @@
             <div class="stat-item2 card day">
               <div class="card-body">
                 <!-- Takvim -->
-                <VCalendar :attributes="attrs" expanded></VCalendar>
+                <VCalendar :attributes="attrs1" expanded></VCalendar>
                 <!-- Tarih Seçici -->
                 <VDatePicker v-model="selectedDate" />
               </div>
@@ -114,7 +114,32 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const habitStore = useHabitStore();
-    // Work with a local copy of checkedDates to avoid mutating the prop
+    const attrs1 = ref([]);
+    console.log('Checked Dates:', habitStore.checkedDates[props.habitId]);
+console.log('Attributes:', attrs1.value);
+
+const loadCheckedDates = () => {
+  const markedDates = habitStore.checkedDates[props.habitId] || [];
+  
+  // Eğer veri bir Set ise, Array'e dönüştür
+  const markedDatesArray = Array.isArray(markedDates) ? markedDates : [...markedDates];
+
+  return markedDatesArray.map((date) => ({
+    // Tarih objesine çeviriyoruz
+    key: `marked-${date}`,
+    dates: "2024-11-28", 
+    highlight: {
+      style: { backgroundColor: '#2fbf71', borderRadius: '50%' },
+    },
+    popover: { label: 'Completed' },
+  }));
+};
+
+attrs1.value = [...loadCheckedDates()];
+console.log('Takvime geçen attrs1:', JSON.stringify(attrs1.value, null, 2));
+
+
+
     const selectedDate = ref(null);
     const checkedDatesCopy = computed(() => {
       const dates = habitStore.checkedDates[props.habitId] || new Set();
@@ -285,7 +310,27 @@ export default defineComponent({
       habitStore,
       selectedDate,
       attrs,
+      attrs1,
     };
   },
 });
 </script>
+
+<style scoped>
+.marked-date {
+  background-color: rgba(47, 191, 113, 0.2);
+  border-radius: 50%;
+  position: relative;
+}
+
+.marked-date::after {
+  content: '✔';
+  color: #2fbf71;
+  font-size: 12px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+</style>
