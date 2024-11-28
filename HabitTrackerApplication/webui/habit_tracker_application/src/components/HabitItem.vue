@@ -115,7 +115,6 @@
 <script>
 import { useHabitStore } from '../stores/habitStore';
 import { ref, onMounted, toRefs, computed, watch } from 'vue';
-import { useRouter } from 'vue-router';
 
 export default {
   props: {
@@ -163,7 +162,6 @@ export default {
     const updatedHabit = ref({ ...props.habit });
     const checked = ref(false);
     const checkbox = ref(props.isCheckbox);
-    const router = useRouter();
     const isUpdateVisible = ref(props.isUpdateVisibleProps);
     const today = new Date().toISOString().split('T')[0];
     const habitNameError = ref("");
@@ -191,7 +189,6 @@ export default {
 
           emit("delete", delete_Status.value);
 
-          router.push({ name: 'Home' });
         }
 
 

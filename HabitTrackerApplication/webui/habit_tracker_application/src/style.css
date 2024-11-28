@@ -373,13 +373,50 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 /* ************************* Home Page End ********************** */
 
 /* ************************* Detail Page Start ********************** */
+/* Basit takvim tasarımının genel yapısı */
+.simple-calendar {
+  width: 100%;
+  font-family: Arial, sans-serif;
+  border-collapse: collapse;
+}
+
+.simple-calendar th,
+.simple-calendar td {
+  padding: 10px;
+  text-align: center;
+}
+
+.simple-calendar th {
+  background-color: #f1f1f1;
+  color: #333;
+  font-weight: bold;
+}
+
+.simple-calendar td {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.simple-calendar td:hover {
+  background-color: #f9f9f9;
+}
+
+
+
+
+
+
+
+
+/* ********************************************************** */
 .detailPage {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  background-color: var(--bg-color);
+  background-color: var(--primary-color);
 }
 
 .custom-modal {
@@ -503,7 +540,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .containerComponents {
-  background-color: var(--bg-color);
+  background-color: var(--primary-color);
   width: 83%;
   display: flex;
   flex-direction: column;
@@ -622,7 +659,6 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   background-color: #28c76f9c;
   padding: .5rem 2rem;
   position: absolute !important;
-  z-index: 1000;
   top: 40%;
   left: 15%;
   border-radius: 8px;
@@ -781,7 +817,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .default-layout .cardItem {
-  background-color: var(--bg-color) !important;
+  background-color: transparent !important;
   width: 100%;
   margin: 0 auto;
   border: none !important;
@@ -958,12 +994,41 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 
 /* *************************  HabitItem End ********************** */
+.vc-container {
+  background-color: var(--primary-color) !important;
+  width: 100% !important;
+  color: var(--text-color) !important;
+  border: none !important;
+  height: 95% !important;
+  margin-top: 1rem !important;
+}
+
+.vc-title-wrapper {
+  background-color: var(--primary-color) !important;
+}
+
+.vc-title {
+  background-color: var(--primary-color) !important;
+}
+
+.vc-title-wrapper span {
+  color: var(--text-color) !important;
+  border: none !important;
+}
+
+.vc-arrow {
+  background-color: var(--primary-color) !important;
+}
+
+.vc-arrow:focus {
+  color: var(--text-color) !important;
+}
+
 
 .default-layout .habit-stats {
-  padding: 1em;
   border-radius: 8px;
   margin: 0 auto;
-  width: 70%;
+  width: 100%;
   color: var(--text-color);
   text-align: center;
 }
@@ -975,6 +1040,8 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   justify-content: center;
   height: auto;
   gap: 2rem;
+  width: 100% !important;
+  height: 110vh;
 }
 
 .default-layout .stat-item1 {
@@ -983,14 +1050,16 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   justify-content: space-between;
   width: 100%;
   padding: 0;
+  height: 110vh;
+
 }
 
 .default-layout .stat-item2 {
-  height: 250px !important;
+  height: 100% !important;
   background-color: var(--bg-color) !important;
   color: var(--text-color) !important;
   border: none !important;
-  box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0.125rem 0.375rem 0 rgba(114, 103, 240, 0.507);
 }
 
 .default-layout .stat-item3 {
@@ -1003,6 +1072,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 !important;
 }
 
 .default-layout .stat-item3 h5 {
@@ -1015,7 +1085,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   border-radius: 100%;
   margin: 0 auto;
   margin-bottom: 0.5rem;
-  font-size: 3rem;
+  font-size: 4rem;
 }
 
 .default-layout .value {
@@ -1025,12 +1095,9 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .default-layout .day {
-  width: 48%;
+  width: 46%;
 }
 
-.default-layout .progress-bar-container {
-  padding-top: 2rem;
-}
 
 /* ************************ Toplam Gün ******************* */
 .default-layout .progress-bar-container {
@@ -1070,6 +1137,8 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 .default-layout .value {
   background-color: var(--primary-color);
   color: var(--text-color);
+  font-size: 5rem !important;
+  margin-top: rem !important;
 }
 
 /* ************************ Oran Barı ********************** */
@@ -1078,6 +1147,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 1rem !important;
 }
 
 .default-layout .circular-chart {
@@ -1099,7 +1169,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 .default-layout .percentage {
   position: absolute;
-  font-size: 1.2em;
+  font-size: 1.7rem;
   font-weight: bold;
   color: #f72d66;
 }
@@ -1107,6 +1177,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 .default-layout .rate {
   width: 25%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
@@ -1114,10 +1185,29 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 /* ************************ Güncel Seri **************************** */
 
 .default-layout .currentSeries {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   width: 25%;
 }
 
 /* ******************************************************** */
+
+.default-layout .span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.default-layout .longest {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  gap: 2rem;
+}
+
 .default-layout .stats p {
   font-size: 0.9em;
   margin: 0.5em 0;
@@ -1347,6 +1437,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   justify-content: center;
+
 }
 
 .alternative-layout .circular-chart {
@@ -1368,7 +1459,6 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 .alternative-layout .percentage {
   position: absolute;
-  font-size: 1.2em;
   font-weight: bold;
   color: #f72d66;
 }

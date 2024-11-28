@@ -9,11 +9,11 @@
       added successfully
     </div>
     <div v-if="alertDanger" class="alert alert-danger" role="alert" style=" position: absolute;  z-index: 1000;">
-      Please fill in the text field !
+      {{ textareaMessage }}
       {{ deleteMessage }}
     </div>
 
-    <div class="containerComponents">
+    <div v-if="containerComponents" class="containerComponents">
       <div class="containerHabit">
         <div class="card containerHabitItem">
           <!-- Notes Modal -->
@@ -100,8 +100,8 @@
           </button>
         </div>
       </div>
-      <HabitCalendar v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" />
-      <HabitStats v-if="selectedHabit" :habit="selectedHabit" :checked-dates="checkedDates" />
+      <!-- <HabitCalendar v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" style="margin-bottom: 2rem;" /> -->
+      <HabitStats v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" style="margin-top: 2rem;" />
     </div>
 
   </div>
@@ -110,7 +110,7 @@
 
 <script>
 import HabitItem from "@/components/HabitItem.vue";
-import HabitCalendar from "@/components/HabitCalendar.vue";
+// import HabitCalendar from "@/components/HabitCalendar.vue";
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useHabitStore } from "../stores/habitStore";
@@ -118,7 +118,7 @@ import HabitStats from "@/components/HabitStats.vue";
 
 
 export default {
-  components: { HabitItem, HabitCalendar, HabitStats },
+  components: { HabitItem, HabitStats },
   props: {
     habitId: {
       type: Number,
@@ -146,7 +146,10 @@ export default {
     const alertSuccessSave = ref(false);
     const alertDangerDelete = ref(false);
     const deleteMessage = ref("");
+    const textareaMessage = ref("");
+    const containerComponents = ref(true);
 
+    console.log("id:", props.habitId);
     const toggleNote = () => {
       isNote.value = !isNote.value;
       if (emptyControl()) {
@@ -247,19 +250,20 @@ export default {
     };
 
     const deleteHabit = () => {
+      alertDanger.value = !alertDanger.value;
       deleteStatus.value = !deleteStatus.value;
-      deleteMessage.value = "Deleted !";
-      alertDangerFunction();
+      textareaMessage.value = ""
+      deleteMessage.value = "Deleted !"
 
       setTimeout(() => {
-        alertDangerFunction();
-        deleteMessage.value = "";
+        alertDanger.value = !alertDanger.value;
       }, 1000);
 
     };
 
     const updateDelete = (value) => {
       deleteStatus.value = !value;
+      containerComponents.value = false;
     };
 
     const alertSuccessFunction = () => {
@@ -268,6 +272,8 @@ export default {
 
     const alertDangerFunction = () => {
       alertDanger.value = !alertDanger.value;
+      deleteMessage.value = "";
+      textareaMessage.value = " Please fill in the text field !";
     };
     const alertSuccessSaveFunction = () => {
       alertSuccessSave.value = !alertSuccessSave.value;
@@ -287,17 +293,21 @@ export default {
     });
 
     const loadCheckedDates = () => {
+      console.log("içerdema1");
       checkedDates.value = habitStore.checkedDates[props.habitId] || new Set();
     };
 
     const updateCheckedDates = (isChecked) => {
+      console.log("içerdema");
       const today = new Date().toISOString().split("T")[0];
       if (isChecked && !checkedDates.value.includes(today)) {
         checkedDates.value.push(today);
       } else if (!isChecked) {
         checkedDates.value = checkedDates.value.filter((date) => date !== today);
+
       }
       habitStore.saveCheckedDates(selectedHabit.value.id, checkedDates.value);
+
     };
 
     return {
@@ -331,6 +341,9 @@ export default {
       alertSuccessSave,
       alertDangerDelete,
       deleteMessage,
+      textareaMessage,
+      containerComponents,
+
     };
   },
 };

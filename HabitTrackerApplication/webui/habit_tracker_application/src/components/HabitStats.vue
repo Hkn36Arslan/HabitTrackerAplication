@@ -1,29 +1,24 @@
 <template>
   <div :class="layoutClass">
     <div class="habit-stats">
-      <div class="header">
-        <h4 v-if="title" style="margin-bottom: 2rem;">{{ habit.name }} Statistics</h4>
-      </div>
       <div class="stats-container">
         <div class="stats">
           <div class="stat-item1">
             <div class="stat-item2 card day">
               <div class="card-body">
-                <h4 class="card-title">Total Number Of Days <span style="color: #f72d66; font-size: 2rem;"> >{{
-                  totalDaysCompleted
-                }}</span>
-                </h4>
-                <!-- 30 dilimlik bar -->
-                <div class="progress-bar-container ">
-                  <div class="progress-bar-item" v-for="(day, index) in totalDaysArray" :key="index"
-                    :style="{ backgroundColor: day.completed ? '#2dce89' : '#f0f0f0' }">
-                    <span class="day-number">{{ index + 1 }}</span>
-                  </div>
-                </div>
+                <!-- Takvim -->
+                <VCalendar :attributes="attrs" expanded></VCalendar>
+                <!-- Tarih Seçici -->
+                <VDatePicker v-model="selectedDate" />
               </div>
+              <h5 class="card-title">Total Number Of Days <span
+                  style=" margin-left: .5rem; color: #f72d66; font-size: 2rem;"> {{
+                    totalDaysCompleted
+                  }}</span>
+              </h5>
             </div>
             <div class="stat-item2 card rate">
-              <h5>Completion Rate</h5>
+              <h3>Completed Rate</h3>
               <div class="circular-progress" :style="{ width: size + 'px', height: size + 'px' }">
                 <!-- SVG Çizimi -->
                 <svg :width="size" :height="size" viewBox="0 0 36 36" class="circular-chart">
@@ -39,20 +34,27 @@
               </div>
             </div>
             <div v-if="currentSeries" class="stat-item2 card currentSeries">
-              <h5 style="margin-top: 2rem; margin-bottom: 3rem;" class="card-title">Current Series</h5>
-              <span class="value"
-                style="width: 70px; border-radius: 100%; margin: 0 auto; margin-bottom: .5rem; font-size: 3rem;">{{
-                  currentStreak }}
+              <h3 style="margin-top: 2rem; margin-bottom: 5rem;" class="card-title">Current Series</h3>
+              <span class="value" style="width: 120px; border-radius: 100%; margin: 0 auto; margin-bottom: .5rem;">{{
+                currentStreak }}
               </span>
+              <h4>DAY</h4>
             </div>
           </div>
-          <div class="stat-item1">
+          <div style="margin-bottom: 2rem;" class="stat-item1">
             <div class="stat-item3 card">
-              <h5 class="card-title">Longest Series</h5>
-              <span class="value">{{ longestStreak }}</span>
-              <ColumnChart class="ColumnChart" :xAxis="myChart.xAxis" :series="myChart.series" :yAxis="myChart.yAxis"
-                :plotOptions="myChart.plotOptions" :Chart="myChart.chart"
-                style="width: 100%;height: auto; border-radius: 5px;" />
+              <h2 style="margin-bottom: 2rem;" class="card-title">Longest Series</h2>
+              <div class="longest">
+                <div class="span">
+                  <span style="width: 200px; height: 200px; text-align: center; border-radius: 100% ;" class="value">{{
+                    longestStreak
+                  }}</span>
+                  <span style="font-size: 1.5rem;">DAY</span>
+                </div>
+                <ColumnChart class="ColumnChart" :xAxis="myChart.xAxis" :series="myChart.series" :yAxis="myChart.yAxis"
+                  :plotOptions="myChart.plotOptions" :Chart="myChart.chart"
+                  style="width: 50%;height: auto; border-radius: 5px;" />
+              </div>
             </div>
           </div>
         </div>
@@ -62,18 +64,25 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { ColumnChart } from 'vuejs3-highcharts';
+import { useHabitStore } from "../stores/habitStore";
+import VCalendar from 'v-calendar';
 
 export default defineComponent({
   name: 'HabitStats',
   components: {
     ColumnChart,
+    VCalendar,
   },
   emits: ['longeStreak'],
   props: {
     habit: {
       type: Object,
+      required: true,
+    },
+    habitId: {
+      type: Number,
       required: true,
     },
     color: {
@@ -82,12 +91,9 @@ export default defineComponent({
     },
     size: {
       type: Number,
-      default: 160,
+      default: 300,
     },
-    checkedDates: {
-      type: Array,
-      default: () => [],
-    },
+
     currentSeries: {
       type: Boolean,
       default: true,
@@ -107,38 +113,45 @@ export default defineComponent({
     }
   },
   setup(props, { emit }) {
-
+    const habitStore = useHabitStore();
     // Work with a local copy of checkedDates to avoid mutating the prop
-    const checkedDatesCopy = [...props.checkedDates];
+    const selectedDate = ref(null);
+    const checkedDatesCopy = computed(() => {
+      const dates = habitStore.checkedDates[props.habitId] || new Set();
+      return Array.from(dates);
+    });
 
-    const totalDaysCompleted = computed(() => checkedDatesCopy.length);
+    console.log("checkedDatesCopy", checkedDatesCopy.value);
+
+    const totalDaysCompleted = computed(() => checkedDatesCopy.value.length);
 
     const completionRate = computed(() => {
-      const rate = ((checkedDatesCopy.length / 30) * 100);
+      const rate = ((checkedDatesCopy.value.length / 30) * 100);
       return rate % 1 === 0 ? rate : rate.toFixed(2);
     });
 
     const progress = completionRate;
 
+    // Güncel seri hesabı
     const currentStreak = computed(() => {
-      let streak = 0;
-      let lastDate = null;
+      // Son eklenen ardışık grup (en güncel seri)
+      const latestGroup = streakGroups.value[streakGroups.value.length - 1];
 
-      Array.from(checkedDatesCopy).sort().reverse().forEach(date => {
-        if (!lastDate || isConsecutive(lastDate, date)) {
-          streak++;
-          lastDate = date;
-        } else {
-          return;
-        }
-      });
-
-      return streak;
+      // Eğer grupta eleman varsa, o grubun uzunluğunu döndür, yoksa 0 döndür
+      return latestGroup ? latestGroup.length : 0;
     });
+
+    const attrs = ref([
+      {
+        key: 'today',
+        highlight: 'red',
+        dates: new Date(),
+      },
+    ]);
 
     const totalDaysArray = computed(() => {
       return Array.from({ length: 30 }, (_, index) => ({
-        completed: checkedDatesCopy.some(date => {
+        completed: checkedDatesCopy.value.some(date => {
           const dateDay = new Date(date).getDate();
           return dateDay === index + 1;
         }),
@@ -151,7 +164,7 @@ export default defineComponent({
       let currentGroup = [];
       let lastDate = null;
 
-      Array.from(checkedDatesCopy).sort().forEach(date => {
+      Array.from(checkedDatesCopy.value).sort().forEach(date => {
         if (lastDate && isConsecutive(lastDate, date)) {
           currentGroup.push(date);
         } else {
@@ -209,7 +222,7 @@ export default defineComponent({
           backgroundColor: "transparent",
         },
         xAxis: {
-          categories: checkedDatesCopy.map(date => new Date(date).toLocaleDateString()), // Bütün tarihleri xAxis'e ekle
+          categories: checkedDatesCopy.value.map(date => new Date(date).toLocaleDateString()), // Bütün tarihleri xAxis'e ekle
           tickmarkPlacement: 'on',
           minRange: 1,
           maxRange: 1,
@@ -241,7 +254,7 @@ export default defineComponent({
         series: streakGroups.value.map((group, index) => ({
           type: 'line',
           color: getLineColor(index, index === latestGroupIndex), // En güncel grup için canlı kırmızı, diğerleri soluk
-          data: checkedDatesCopy.map(date => group.includes(date) ? 1 : null), // Grup içindeki tarihler 1, diğerleri null
+          data: checkedDatesCopy.value.map(date => group.includes(date) ? 1 : null), // Grup içindeki tarihler 1, diğerleri null
           lineWidth: 2,
           marker: {
             enabled: true,
@@ -268,7 +281,10 @@ export default defineComponent({
       totalDaysArray,
       progress,
       myChart,
-      postLongeStreak
+      postLongeStreak,
+      habitStore,
+      selectedDate,
+      attrs,
     };
   },
 });
