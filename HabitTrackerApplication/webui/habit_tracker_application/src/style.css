@@ -632,138 +632,79 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 
 /* ******************** Calendar Start ********************** */
+.totalDays {
+  text-align: center;
+  color: var(--text-color);
+}
 
 /* Haftanın her bir günü */
 .calendar {
-  width: 100%;
+  width: 40%;
   margin: 0 auto;
   border: none !important;
   border-radius: 5px;
   margin-top: 2rem;
   box-shadow: 0 0.125rem 0.375rem 0 rgba(114, 103, 240, 0.507);
   background-color: var(--bg-color) !important;
-  /* background-color: #1fd671fa !important; */
+
 }
 
-.custom-style {
-  position: relative;
-}
-
-.custom-style::before {
-  content: " ✔ Completed";
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  color: white;
-  background-color: #28c76f9c;
-  padding: .5rem 2rem;
-  position: absolute !important;
-  top: 40%;
-  left: 15%;
-  border-radius: 8px;
-}
-
-.calendar h3 {
-  margin: 0 auto;
-  margin-bottom: 2rem;
-  margin-top: 1rem;
-  color: var(--text-color);
-}
-
-.fc-button-group {
-  position: relative;
-  vertical-align: middle;
-  background-color: var(--bg-color) !important;
+.vc-container {
+  background-color: transparent !important;
+  width: 100% !important;
+  color: var(--text-color) !important;
   border: none !important;
-  margin-left: 3rem;
+  height: 100% !important;
+  margin-top: 1rem !important;
 }
 
-.fc .fc-button-primary {
-  background-color: transparent;
-  color: var(--text-color);
-  border: none !important;
+.vc-header {
+  margin-bottom: 1.5rem;
 }
 
-.fc .fc-button-primary:hover {
-  background-color: #4454c3;
-  color: white;
-  border: none !important;
+.vc-title-wrapper {
+  background-color: transparent !important;
+  margin-bottom: 3rem !important;
 }
 
-.fc .fc-button-primary:focus {
-  background-color: var(--bg-color) !important;
+.vc-title {
+  background-color: transparent !important;
+  font-size: 1.5rem;
+}
+
+.vc-title-wrapper span {
   color: var(--text-color) !important;
   border: none !important;
 }
 
-.fc-toolbar-title {
-  color: var(--text-color);
-  margin-left: 1rem !important;
-
+.vc-arrow {
+  border-radius: 50% !important;
+  background-color: var(--primary-color) !important;
 }
 
-.fc-header-toolbar {
-  justify-content: flex-start !important;
-}
-
-.fc-scrollgrid-sync-inner {
+.vc-arrow:focus {
   color: var(--text-color) !important;
+}
+
+
+.vc-highlight {
+  border-radius: 50%;
   border: none !important;
-}
-
-.fc-scrollgrid-sync-inner a {
-  color: var(--text-color) !important;
-  text-decoration: none !important;
-  font-size: 1rem;
-  font-weight: 100;
-}
-
-
-.fc-today-button {
-  display: none !important;
-}
-
-.fc-dayGridMonth-button {
-  display: none !important;
-}
-
-
-.fc-daygrid-day-top {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: left !important;
-  padding: 1rem !important;
-}
-
-.fc-daygrid-day-number {
-  font-size: 1em !important;
-  color: var(--text-color) !important;
   background-color: var(--primary-color);
-  width: 30px;
-  text-align: center;
-  border-radius: 100%;
 }
 
-.fc table.fc-scrollgrid {
-  border-color: #44485e !important;
-  border-top-color: var(--calendar-border-color) !important;
-  border-bottom-width: 0px;
-  border-collapse: separate;
-  border-right-width: 0px;
-  border-left-width: 0px;
+/* İşaretli tarihlerde tik işareti eklemek */
+.vc-highlight::after {
+  content: '✔';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(44, 202, 44);
+  /* Yeşil renk */
+  font-size: 1.5rem;
 }
 
-.fc table,
-.fc-view-harness,
-.fc-dayGridMonth-view,
-.fc .fc-timegrid-axis,
-.fc tbody,
-.fc thead,
-.fc tbody td,
-.fc th {
-  border-color: var(--calendar-border-color) !important;
-}
 
 
 /* ******************** Calendar End ************************ */
@@ -994,36 +935,6 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 
 /* *************************  HabitItem End ********************** */
-.vc-container {
-  background-color: var(--primary-color) !important;
-  width: 100% !important;
-  color: var(--text-color) !important;
-  border: none !important;
-  height: 95% !important;
-  margin-top: 1rem !important;
-}
-
-.vc-title-wrapper {
-  background-color: var(--primary-color) !important;
-}
-
-.vc-title {
-  background-color: var(--primary-color) !important;
-}
-
-.vc-title-wrapper span {
-  color: var(--text-color) !important;
-  border: none !important;
-}
-
-.vc-arrow {
-  background-color: var(--primary-color) !important;
-}
-
-.vc-arrow:focus {
-  color: var(--text-color) !important;
-}
-
 
 .default-layout .habit-stats {
   border-radius: 8px;
@@ -1708,6 +1619,8 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   align-items: center;
   justify-content: center;
 }
+
+
 
 /* ************************* Stats Page End ********************** */
 

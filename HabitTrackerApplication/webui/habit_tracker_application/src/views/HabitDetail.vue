@@ -100,8 +100,10 @@
           </button>
         </div>
       </div>
-      <!-- <HabitCalendar v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" style="margin-bottom: 2rem;" /> -->
-      <HabitStats v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" style="margin-top: 2rem;" />
+      <HabitCalendar v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" :data="receivedData"
+        style="margin-bottom: 2rem;" />
+      <HabitStats v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" @updateData="longeStreakFunction"
+        style="margin-top: 2rem;" />
     </div>
 
   </div>
@@ -110,15 +112,16 @@
 
 <script>
 import HabitItem from "@/components/HabitItem.vue";
-// import HabitCalendar from "@/components/HabitCalendar.vue";
+import HabitCalendar from "@/components/HabitCalendar.vue";
 import { ref, onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useHabitStore } from "../stores/habitStore";
 import HabitStats from "@/components/HabitStats.vue";
 
 
+
 export default {
-  components: { HabitItem, HabitStats },
+  components: { HabitItem, HabitCalendar, HabitStats },
   props: {
     habitId: {
       type: Number,
@@ -148,8 +151,17 @@ export default {
     const deleteMessage = ref("");
     const textareaMessage = ref("");
     const containerComponents = ref(true);
+    const receivedData = ref("");
 
-    console.log("id:", props.habitId);
+    console.log("receivedData", receivedData.value);
+
+    watch(
+      receivedData,
+      (newValue) => {
+        receivedData.value = newValue;
+      }
+    );
+
     const toggleNote = () => {
       isNote.value = !isNote.value;
       if (emptyControl()) {
@@ -283,6 +295,11 @@ export default {
       alertDangerDelete.value = !alertDangerDelete.value;
     };
 
+    const longeStreakFunction = (data) => {
+
+      receivedData.value = data;
+
+    }
     onMounted(() => {
       const habitId = Number(route.params.habitId);
       selectedHabit.value = habitStore.getHabitById(habitId);
@@ -290,15 +307,16 @@ export default {
       if (selectedHabit.value) {
         loadCheckedDates();
       }
+
     });
 
     const loadCheckedDates = () => {
-      console.log("içerdema1");
+
       checkedDates.value = habitStore.checkedDates[props.habitId] || new Set();
     };
 
     const updateCheckedDates = (isChecked) => {
-      console.log("içerdema");
+
       const today = new Date().toISOString().split("T")[0];
       if (isChecked && !checkedDates.value.includes(today)) {
         checkedDates.value.push(today);
@@ -343,6 +361,8 @@ export default {
       deleteMessage,
       textareaMessage,
       containerComponents,
+      receivedData,
+      longeStreakFunction
 
     };
   },

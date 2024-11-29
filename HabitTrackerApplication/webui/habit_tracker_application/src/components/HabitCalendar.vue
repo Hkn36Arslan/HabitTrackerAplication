@@ -1,59 +1,74 @@
 <template>
   <div class="card calendar">
-    <h3>{{ habit.name }} Monthly Calendar</h3>
-    <FullCalendar ref="fullCalendar" :options="calendarOptions" />
+    <div class="card-body">
+      <!-- Takvim -->
+      <VCalendar :locale="'en'" :attributes="calendarAttributes" expanded />
+    </div>
+    <div class="totalDays">
+      <h4>Total Number Of Days</h4> <span style=" margin-left: .5rem; color: #f72d66; font-size: 2rem;"> {{ data
+        }}</span>
+    </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, computed, watch } from "vue";
 import { useHabitStore } from "../stores/habitStore";
-import FullCalendar from "@fullcalendar/vue3";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
+import { VCalendar } from "v-calendar";
 
 export default {
   components: {
-    FullCalendar,
+    VCalendar,
   },
   props: {
     habitId: {
       type: Number,
       required: true,
     },
-    habit: {
-      type: Object,
+    data: {
+      type: String,
       required: true,
     },
   },
   setup(props) {
     const habitStore = useHabitStore();
 
-    // İşaretli tarihleri kontrol eden fonksiyon
-    const loadCheckedDate = (date) => {
-      return habitStore.loadCheckedDate(props.habitId, date);
-    };
+    // Store'dan işaretli tarihleri al ve reaktif olarak izle
+    const checkedDatesCopy = computed(() => {
+      const dates = habitStore.checkedDates[props.habitId] || new Set();
+      return Array.from(dates);
+    });
 
-    const calendarOptions = ref({
-      plugins: [dayGridPlugin, interactionPlugin],
-      headerToolbar: {
-        left: "prev,next today",
-        center: "title",
-        right: "dayGridMonth",
-      },
-      initialView: "dayGridMonth",
-      dayCellDidMount: (info) => {
-        // Tarihi UTC olarak formatlayarak karşılaştırma yapıyoruz
-        const dateStr = new Date(Date.UTC(info.date.getFullYear(), info.date.getMonth(), info.date.getDate())).toISOString().split("T")[0];
-        if (loadCheckedDate(dateStr)) {
+    console.log("checkedDatesCalendar", checkedDatesCopy.value);
 
-          info.el.classList.add("custom-style"); // Custom style sınıfı ekleniyor
-        }
+    // Takvim için özellikleri ayarla
+    const calendarAttributes = computed(() => [
+      {
+        key: "checked-dates",
+        dates: checkedDatesCopy.value, // İşaretli tarihleri Pinia'dan al
+        highlight: {
+          color: "green", // Kenar rengi yok
+          fillMode: "",     // Arka plan yok
+        },
+        popover: {
+          label: "Habit Completed", // Popup etiketi
+        },
       },
+    ]);
+
+    // İşaretli tarihler güncellendiğinde takvimi de güncelle
+    watch(checkedDatesCopy, (newDates) => {
+      habitStore.saveCheckedDates(props.habitId, new Set(newDates)); // Yeni tarihleri sakla
+      console.log("Updated checkedDates in calendar:", newDates);
+    });
+
+    // İlk yükleme sırasında kontrol
+    onMounted(() => {
+      console.log("Mounted, checked dates loaded:", checkedDatesCopy.value);
     });
 
     return {
-      calendarOptions,
+      calendarAttributes,
     };
   },
 };

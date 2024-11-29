@@ -4,19 +4,6 @@
       <div class="stats-container">
         <div class="stats">
           <div class="stat-item1">
-            <div class="stat-item2 card day">
-              <div class="card-body">
-                <!-- Takvim -->
-                <VCalendar :attributes="attrs1" expanded></VCalendar>
-                <!-- Tarih Seçici -->
-                <VDatePicker v-model="selectedDate" />
-              </div>
-              <h5 class="card-title">Total Number Of Days <span
-                  style=" margin-left: .5rem; color: #f72d66; font-size: 2rem;"> {{
-                    totalDaysCompleted
-                  }}</span>
-              </h5>
-            </div>
             <div class="stat-item2 card rate">
               <h3>Completed Rate</h3>
               <div class="circular-progress" :style="{ width: size + 'px', height: size + 'px' }">
@@ -64,18 +51,16 @@
 </template>
 
 <script>
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onMounted } from 'vue';
 import { ColumnChart } from 'vuejs3-highcharts';
 import { useHabitStore } from "../stores/habitStore";
-import VCalendar from 'v-calendar';
 
 export default defineComponent({
   name: 'HabitStats',
   components: {
     ColumnChart,
-    VCalendar,
   },
-  emits: ['longeStreak'],
+  emits: ['longeStreak', 'updateData'],
   props: {
     habit: {
       type: Object,
@@ -114,39 +99,12 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const habitStore = useHabitStore();
-    const attrs1 = ref([]);
-    console.log('Checked Dates:', habitStore.checkedDates[props.habitId]);
-console.log('Attributes:', attrs1.value);
-
-const loadCheckedDates = () => {
-  const markedDates = habitStore.checkedDates[props.habitId] || [];
-  
-  // Eğer veri bir Set ise, Array'e dönüştür
-  const markedDatesArray = Array.isArray(markedDates) ? markedDates : [...markedDates];
-
-  return markedDatesArray.map((date) => ({
-    // Tarih objesine çeviriyoruz
-    key: `marked-${date}`,
-    dates: "2024-11-28", 
-    highlight: {
-      style: { backgroundColor: '#2fbf71', borderRadius: '50%' },
-    },
-    popover: { label: 'Completed' },
-  }));
-};
-
-attrs1.value = [...loadCheckedDates()];
-console.log('Takvime geçen attrs1:', JSON.stringify(attrs1.value, null, 2));
-
-
-
-    const selectedDate = ref(null);
+    // Work with a local copy of checkedDates to avoid mutating the prop
     const checkedDatesCopy = computed(() => {
       const dates = habitStore.checkedDates[props.habitId] || new Set();
       return Array.from(dates);
     });
 
-    console.log("checkedDatesCopy", checkedDatesCopy.value);
 
     const totalDaysCompleted = computed(() => checkedDatesCopy.value.length);
 
@@ -165,14 +123,6 @@ console.log('Takvime geçen attrs1:', JSON.stringify(attrs1.value, null, 2));
       // Eğer grupta eleman varsa, o grubun uzunluğunu döndür, yoksa 0 döndür
       return latestGroup ? latestGroup.length : 0;
     });
-
-    const attrs = ref([
-      {
-        key: 'today',
-        highlight: 'red',
-        dates: new Date(),
-      },
-    ]);
 
     const totalDaysArray = computed(() => {
       return Array.from({ length: 30 }, (_, index) => ({
@@ -215,9 +165,6 @@ console.log('Takvime geçen attrs1:', JSON.stringify(attrs1.value, null, 2));
     });
 
     const longestStreak = computed(() => longestStreakGroups.value[0]?.length || 0);
-
-    console.log("seri:", longestStreak.value);
-    console.log("longestStreakGroup:", longestStreakGroups.value);
 
     function isConsecutive(date1, date2) {
       const d1 = new Date(date1);
@@ -292,6 +239,7 @@ console.log('Takvime geçen attrs1:', JSON.stringify(attrs1.value, null, 2));
 
     const postLongeStreak = (() => {
       emit("longeStreak", { name: props.habit.name, streak: longestStreak.value });
+      emit("updateData", totalDaysCompleted.value);
     });
 
     onMounted(() => {
@@ -308,29 +256,7 @@ console.log('Takvime geçen attrs1:', JSON.stringify(attrs1.value, null, 2));
       myChart,
       postLongeStreak,
       habitStore,
-      selectedDate,
-      attrs,
-      attrs1,
     };
   },
 });
 </script>
-
-<style scoped>
-.marked-date {
-  background-color: rgba(47, 191, 113, 0.2);
-  border-radius: 50%;
-  position: relative;
-}
-
-.marked-date::after {
-  content: '✔';
-  color: #2fbf71;
-  font-size: 12px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-</style>
