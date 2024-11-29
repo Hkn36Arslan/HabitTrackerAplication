@@ -1,95 +1,99 @@
 <template>
   <div :class="layoutClass">
     <div>
-      <!-- Offcanvas Arka Plan Karartması -->
-      <div v-if="isUpdateVisibleProps" class="offcanvas-backdrop fade show"></div>
+      <!-- Modal Arka Plan Karartması -->
+      <div v-if="isUpdateVisibleProps" class="modal-backdrop fade show"></div>
 
-      <div v-if="isUpdateVisibleProps" class="offcanvas offcanvas-start show" tabindex="-1" id="offcanvasAddHabit"
-        aria-labelledby="offcanvasAddHabitLabel" role="dialog">
-        <div class="offcanvas-header border-bottom" style="position: relative;">
-          <h5 id="offcanvasAddHabitLabel" class="offcanvas-title">Add New Habits</h5>
-          <button class="closeBtn" type="button" @click="openUpdate" aria-label="Close">X</button>
-        </div>
-        <div style="position: relative;" class="offcanvas-body mx-0 flex-grow-0 p-6 h-100">
-          <!-- Alert Mesajları -->
-          <div v-if="errorMessage" class="alert alert-danger" role="alert">
-            {{ errorMessage }}
+      <!-- Modal Yapısı -->
+      <div v-if="isUpdateVisibleProps" class="modal fade show d-block" tabindex="-1" role="dialog" id="modalAddHabit">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header border-bottom">
+              <h5 id="modalAddHabitLabel" class="modal-title">Add New Habits</h5>
+              <button type="button" class="closeBtn" @click="openUpdate" aria-label="Close">✕</button>
+            </div>
+            <div class="modal-body">
+              <!-- Alert Mesajları -->
+              <div v-if="errorMessage" class="alert alert-danger"
+                style=" position: absolute !important; z-index: 2000 !important; margin-left:25%; top: 30%;"
+                role="alert">
+                {{ errorMessage }}
+              </div>
+              <div v-if="successMessage" class="alert alert-success"
+                style=" position: absolute !important; z-index: 2000 !important; margin-left:25%; top: 30%;"
+                role="alert">
+                {{ successMessage }}
+              </div>
+
+              <!-- Form Yapısı -->
+              <form @submit.prevent="validateForm" id="updateHabitForm" novalidate>
+                <div class="mb-4">
+                  <label class="form-label" for="habit-name">Habit Name</label>
+                  <input v-model="updatedHabit.name" class="form-control mb-4" placeholder="Habit Name"
+                    :class="{ 'input-error': habitNameError }" />
+                  <small v-if="habitNameError" class="text-danger">
+                    {{ habitNameError }}
+                  </small>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label" for="habit-description">Description</label>
+                  <input type="text" class="form-control" id="habit-description" placeholder="Description"
+                    v-model="updatedHabit.description" />
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label" for="habit-start-date">Start Date</label>
+                  <input type="date" class="form-control" id="habit-start-date" v-model="updatedHabit.startDate"
+                    :class="{ 'input-error': habitStartDateError }" />
+                  <small v-if="habitStartDateError" class="text-danger">
+                    {{ habitStartDateError }}
+                  </small>
+                </div>
+
+                <div class="mb-4">
+                  <label class="form-label" for="habit-goal">Goal</label>
+                  <input type="text" class="form-control" id="habit-goal" placeholder="Goal"
+                    v-model="updatedHabit.goal" />
+                </div>
+
+                <div class="d-flex justify-content-between">
+                  <button type="submit" class="btn btn-success">
+                    <i class="bi bi-arrow-repeat"></i>
+                    Update
+                  </button>
+                  <button @click="openUpdate" type="reset" class="btn btn-secondary">
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-          <div v-if="successMessage" class="alert alert-success" role="alert">
-            {{ successMessage }}
-          </div>
-          <form @submit.prevent="validateForm" class="add-new-habit pt-0 fv-plugins-bootstrap5 fv-plugins-framework"
-            id="updateHabitForm" novalidate>
-            <div class="mb-4 fv-plugins-icon-container">
-              <label class="form-label" for="habit-name">Habit Name</label>
-              <input v-model="updatedHabit.name" class="form-control mb-4" placeholder="Habit Name"
-                :class="{ 'input-error': habitNameError }" />
-              <small v-if="habitNameError" class="error-message">
-                {{ habitNameError }}
-              </small>
-            </div>
-
-            <div class="mb-4 fv-plugins-icon-container">
-              <label class="form-label" for="habit-description">Description</label>
-              <input type="text" class="form-control" id="habit-description" placeholder="Description"
-                v-model="updatedHabit.description" />
-            </div>
-
-            <div class="mb-4 fv-plugins-icon-container">
-              <label class="form-label" for="habit-start-date">Start Date</label>
-              <input type="date" class="form-control" id="habit-start-date" v-model="updatedHabit.startDate"
-                :class="{ 'input-error': habitStartDateError }" />
-              <small v-if="habitStartDateError" class="error-message">
-                {{ habitStartDateError }}
-              </small>
-            </div>
-
-            <div class="mb-4 fv-plugins-icon-container">
-              <label class="form-label" for="habit-goal">Goal</label>
-              <input type="text" class="form-control" id="habit-goal" placeholder="Goal" v-model="updatedHabit.goal" />
-            </div>
-
-            <button type="submit" class="btn btn-success me-3 data-submit waves-effect waves-light">
-              <i class="bi bi-arrow-repeat"></i>
-              Update
-            </button>
-            <button @click="openUpdate" style="width: 48%;" type="reset" class="btn btn-secondary waves-effect">
-              Cancel
-            </button>
-          </form>
         </div>
       </div>
 
       <!-- ****************************************************************************** -->
-      <div class="card cardItem ">
+      <div class="card cardItem">
         <div class="card Item">
           <div class="card checkbox" v-if="checkbox">
             <!-- Elementin görünür olup olmamasını sağlamak için v-if yapısı kullanıldı.-->
             <input type="checkbox" v-model="checked" @change="saveCheckedState"
               :class="{ completed: isCheckedToday }" />
-            <span>Completed ✓ </span>
-            <!--  :class="{ completed: isCheckedToday }" eğer isCheckedToday true dönerse elemente completed olarak class ekle -->
-            <!-- v-model: checkbox'ın işaretlenme durumunu kontrol eder./ @change="saveCheckedState": işaretlenmeyi localStorage kaydetmek için fonksiyona yönlendirir. -->
+            <span>Completed ✓</span>
           </div>
           <div class="group">
-            <div class="card  name">
+            <div class="card name">
               <h2 style="font-family: 'Open Sans', sans-serif; margin-left: 1rem;">{{ habit.name }}</h2>
-              <!-- props olarak alınan objenin özelliği -->
             </div>
-            <div style="" class="card description" v-if="isDescription">
-              <!-- Açıklama -->
+            <div class="card description" v-if="isDescription">
               <p>
                 <i class="bi bi-card-text"></i>
                 {{ habit.description }}
               </p>
-
-              <!-- Hedef -->
               <p>
                 <i class="bi bi-flag"></i>
                 <strong style="color: #28c76f;">Goal :</strong> {{ habit.goal }}
               </p>
-
-              <!-- Başlangıç Tarihi -->
               <p>
                 <i class="bi bi-calendar-event"></i>
                 <strong style="color: #ff4c51;">Start :</strong> {{ habit.startDate }}
@@ -98,19 +102,18 @@
           </div>
           <div class="card edit" v-if="isEditButton">
             <button class="btn btn-primary">
-              <!-- Butondaki router-link yapısına tıklayınca HabitDetail sayfasına yönlendirir. -->
               <router-link :to="{ name: 'HabitDetail', params: { habitId: habit.id } }" class="router">
                 <i class="bi bi-eye"> Detail</i>
               </router-link>
             </button>
           </div>
         </div>
-        <div class="detail" v-if="isEditingLocal"> <!-- Düzenleme alanının görünürlüğünü ayarlanmıştır. -->
-        </div>
+        <div class="detail" v-if="isEditingLocal"></div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import { useHabitStore } from '../stores/habitStore';

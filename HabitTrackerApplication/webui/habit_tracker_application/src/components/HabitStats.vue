@@ -33,9 +33,11 @@
               <h2 style="margin-bottom: 2rem;" class="card-title">Longest Series</h2>
               <div class="longest">
                 <div class="span">
-                  <span style="width: 200px; height: 200px; text-align: center; border-radius: 100% ;" class="value">{{
-                    longestStreak
-                  }}</span>
+                  <span
+                    style="width: 200px; height: 200px; display: flex; align-items: center;justify-content: center; border-radius: 100% ;"
+                    class="value">{{
+                      longestStreak
+                    }}</span>
                   <span style="font-size: 1.5rem;">DAY</span>
                 </div>
                 <ColumnChart class="ColumnChart" :xAxis="myChart.xAxis" :series="myChart.series" :yAxis="myChart.yAxis"
