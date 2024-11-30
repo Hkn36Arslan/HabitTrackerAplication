@@ -12,18 +12,33 @@
       {{ textareaMessage }}
       {{ deleteMessage }}
     </div>
-
     <div v-if="containerComponents" class="containerComponents">
       <div class="containerHabit">
         <div class="card containerHabitItem">
-          <!-- Notes Modal -->
-          <div v-if="isNote" class="modal-backdrop custom-modal">
+          <HabitItem style="width: 80% !important;" v-if="selectedHabit" :habit="selectedHabit" :isEditing="true"
+            :isEditBtn="false" :isCheckbox="false" @checkboxToggled="updateCheckedDates" :layout="layout"
+            :is-update-visible-props="isUpdateVisible" @close="updateVisible" :delete-status="deleteStatus"
+            @delete="updateDelete" />
+          <button style="width:25%; height: 50px;" @click="openUpdate" class="btn btn-primary ">
+            <i class="bi bi-arrow-repeat"></i>
+            Update</button>
+          <!-- update,cancel ve delete butonları -->
+        </div>
+        <div class="card containerHabitItem2" style=" height: 426px;">
+          <div class="content2">
+            <div class="messageBox">
+              <input v-model="newNote" placeholder="Add notes for Habit ..." />
+              <div class="contentButon">
+                <button style="width:40px;height: 40px; border-radius: 50%;" @click="addNote" class="btn btn-primary ">
+                  <i class="bi bi-send-fill"></i></button>
+              </div>
+            </div>
             <div v-if="alertDangerDelete" class="alert alert-danger" role="alert"
-              style=" position: absolute;  z-index: 1000;">
+              style=" position: absolute; left:40%; top: 20%;  z-index: 1000;">
               Note Deleted
             </div>
             <div v-if="alertSuccessSave" class="alert alert-success" role="alert"
-              style=" position: absolute; z-index: 1000;">
+              style=" position: absolute; left:40%; top: 20%; z-index: 1000;">
               Saved Successfully
             </div>
             <!-- ***************************************************** -->
@@ -42,66 +57,29 @@
                 </div>
               </div>
             </div>
-            <!-- ***************************************************** -->
-            <div class="modal-content custom-modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title">Notes for {{ selectedHabit.name }}</h5>
-                <button class="closeBtn" type="button" @click="close" aria-label="Close">X</button>
-              </div>
-              <div class="modal-body">
-                <div class="note-pad">
-                  <ul class="list-group note-list">
-                    <li v-if="emptyList" class="list-group-item note-item">
-                      <i class="bi bi-pin-angle-fill pin-icon"></i>
-                      <span class="note-text">Not yok.</span>
-                    </li>
-                    <li v-for="(note, index) in notes" :key="index" class="list-group-item note-item">
-                      <i class="bi bi-pin-angle-fill pin-icon"></i>
-                      <span class="note-text">{{ note }}</span>
-                      <button @click="toggleEditNote(index)" style="width: 5%; font-size: 1rem;margin-right: .5rem;"
-                        class="btn btn-primary btn-sm ">
-                        <i class="bi bi-pencil"></i>
-                      </button>
-                      <button @click="deleteNote(index)" class="btn btn-danger btn-sm delete-btn">
-                        <i class="bi bi-trash"></i>
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button @click="close" class="btn btn-secondary w-25">Close</button>
-              </div>
+            <div class="note-pad">
+              <ul class="list-group note-list">
+                <li v-if="noteControl" class="list-group-item note-item">
+                  <i class="bi bi-pin-angle-fill pin-icon"></i>
+                  <span class="note-text">Not yok.</span>
+                </li>
+                <li v-for="(note, index) in notes" :key="index" class="list-group-item note-item">
+                  <i class="bi bi-pin-angle-fill pin-icon"></i>
+                  <span class="note-text">{{ note }}</span>
+                  <button @click="toggleEditNote(index)" style="width: 5%; font-size: 1rem;margin-right: .5rem;"
+                    class="btn btn-primary btn-sm ">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button @click="deleteNote(index)" class="btn btn-danger btn-sm delete-btn">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
-
-          <HabitItem style="width: 80% !important;" v-if="selectedHabit" :habit="selectedHabit" :isEditing="true"
-            :isEditBtn="false" :isCheckbox="false" @checkboxToggled="updateCheckedDates" :layout="layout"
-            :is-update-visible-props="isUpdateVisible" @close="updateVisible" :delete-status="deleteStatus"
-            @delete="updateDelete" />
-          <button style="width:25%; height: 50px;" @click="openUpdate" class="btn btn-primary ">
-            <i class="bi bi-arrow-repeat"></i>
-            Update</button>
-          <!-- update,cancel ve delete butonları -->
-        </div>
-        <div class="card containerHabitItem" style=" height: 426px;">
-          <div class="content">
-            <h4>Manage Notes for habit</h4>
-            <textarea v-model="newNote" placeholder="Enter your note here..." class="form-control mb-2"></textarea>
-            <div class="contentButon">
-              <button style="width: 40%;" @click="addNote" class="btn btn-primary mb-2">
-                <i style="font-size: 1.3rem; margin-top: 2rem !important;" class="bi bi-plus"></i>
-                Add Note</button>
-            </div>
-          </div>
-          <button style="width:25%; height: 50px; display: flex; align-items: center; justify-content: center;"
-            @click="toggleNote" class="btn btn-primary mb-2">
-            <i style="font-size: 1.2rem; margin-right: .5rem;" class="bi bi-list-task"></i> Manage Notes
-          </button>
         </div>
       </div>
-      <HabitCalendar v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" :data="receivedData"
-        style="margin-bottom: 2rem;" />
+      <HabitCalendar v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" :data="receivedData" />
       <HabitStats v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" @updateData="longeStreakFunction"
         style="margin-top: 2rem;" />
     </div>
@@ -137,10 +115,8 @@ export default {
     const deleteStatus = ref(false);
     const isUpdateVisible = ref(false);
     // Notes state
-    const isNote = ref(false);
     const newNote = ref("");
     const notes = ref([]);
-    const emptyList = ref(false);
     const isEditingNote = ref(false); // Düzenleme modunu kontrol eder
     const editNoteIndex = ref(null); // Düzenlenen notun indeksi
     const editNoteText = ref(""); // Düzenlenecek notun yeni içeriği
@@ -152,6 +128,7 @@ export default {
     const textareaMessage = ref("");
     const containerComponents = ref(true);
     const receivedData = ref("");
+    const noteControl = ref(true);
 
     console.log("receivedData", receivedData.value);
 
@@ -161,32 +138,19 @@ export default {
         receivedData.value = newValue;
       }
     );
-
-    const toggleNote = () => {
-      isNote.value = !isNote.value;
-      if (emptyControl()) {
-        emptyList.value = true;
+    watch(
+      noteControl,
+      (newValue) => {
+        noteControl.value = newValue;
       }
-      else if (isNote.value) {
-        notes.value = habitStore.getNotesByHabitId(props.habitId);
-        emptyList.value = false;
-      }
-    };
-
-    const emptyControl = () => {
-      if (notes.value.length === 0) {
-        emptyList.value = true;
-        return emptyList.value;
-      }
-    };
+    );
 
     const addNote = () => {
       if (newNote.value.trim() !== "") {
         habitStore.addNote(props.habitId, newNote.value.trim());
         notes.value = habitStore.getNotesByHabitId(props.habitId);
         newNote.value = "";
-        emptyList.value = !emptyList.value;
-
+        noteControl.value = false;
         alertSuccessFunction();
 
         setTimeout(() => {
@@ -217,8 +181,9 @@ export default {
         isEditingNote.value = false;
         editNoteIndex.value = null;
         editNoteText.value = "";
-      }
+        noteControl.value = false;
 
+      }
       alertSuccessSaveFunction();
 
       setTimeout(() => {
@@ -228,21 +193,23 @@ export default {
     };
 
     const deleteNote = (index) => {
+
       habitStore.deleteNote(props.habitId, index);
+
       notes.value = habitStore.getNotesByHabitId(props.habitId);
-      if (emptyControl()) {
-        emptyList.value = true;
+
+
+      if (notes.value.length === 0) {
+        noteControl.value = true;
       }
+
       alertDangerDeleteFunction();
 
       setTimeout(() => {
         alertDangerDeleteFunction();
       }, 1000);
     };
-    const close = () => {
-      isNote.value = !isNote.value;
-      emptyList.value = !emptyList.value;
-    };
+
 
     // Habit Management Logic
     watch(isUpdateVisible, (newValue) => {
@@ -266,7 +233,6 @@ export default {
       deleteStatus.value = !deleteStatus.value;
       textareaMessage.value = ""
       deleteMessage.value = "Deleted !"
-
       setTimeout(() => {
         alertDanger.value = !alertDanger.value;
       }, 1000);
@@ -295,10 +261,10 @@ export default {
       alertDangerDelete.value = !alertDangerDelete.value;
     };
 
+
     const longeStreakFunction = (data) => {
 
       receivedData.value = data;
-
     }
     onMounted(() => {
       const habitId = Number(route.params.habitId);
@@ -306,6 +272,12 @@ export default {
       notes.value = habitStore.getNotesByHabitId(props.habitId);
       if (selectedHabit.value) {
         loadCheckedDates();
+      }
+
+      notes.value = habitStore.getNotesByHabitId(props.habitId);
+
+      if (notes.value.length !== 0) {
+        noteControl.value = false;
       }
 
     });
@@ -324,6 +296,7 @@ export default {
         checkedDates.value = checkedDates.value.filter((date) => date !== today);
 
       }
+
       habitStore.saveCheckedDates(selectedHabit.value.id, checkedDates.value);
 
     };
@@ -340,15 +313,11 @@ export default {
       deleteHabit,
       deleteStatus,
       updateDelete,
-      isNote,
       newNote,
       notes,
       addNote,
       deleteNote,
-      toggleNote,
       close,
-      emptyList,
-      emptyControl,
       isEditingNote,
       editNoteIndex,
       editNoteText,
@@ -362,7 +331,8 @@ export default {
       textareaMessage,
       containerComponents,
       receivedData,
-      longeStreakFunction
+      longeStreakFunction,
+      noteControl,
 
     };
   },

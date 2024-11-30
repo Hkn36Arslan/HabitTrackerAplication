@@ -5,7 +5,7 @@
       <VCalendar :locale="'en'" :attributes="calendarAttributes" expanded />
     </div>
     <div class="totalDays">
-      <h4>Total Number Of Days</h4> <span style=" margin-left: .5rem; color: #f72d66; font-size: 2rem;"> {{ data
+      <h5>Total Days Completed</h5> <span style=" margin-left: .5rem; color: #f72d66; font-size: 2rem;"> {{ data
         }}</span>
     </div>
   </div>

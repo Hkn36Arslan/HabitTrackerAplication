@@ -44,7 +44,8 @@
                 <label class="form-label" for="habit-goal">Goal</label>
                 <input type="text" class="form-control" id="habit-goal" placeholder="Goal" v-model="newHabit.goal" />
               </div>
-              <button type="submit" class="btn btn-success me-3">Add Habit</button>
+              <button type="submit" class="btn btn-success me-3">
+                <i class="bi bi-plus" style="font-size: 1.2rem;"></i> Add Habit</button>
               <button @click="closeBtn" type="reset" class="btn btn-secondary">Cancel</button>
             </form>
           </div>

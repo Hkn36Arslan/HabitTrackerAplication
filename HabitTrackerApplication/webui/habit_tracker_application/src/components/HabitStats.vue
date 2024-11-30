@@ -4,6 +4,13 @@
       <div class="stats-container">
         <div class="stats">
           <div class="stat-item1">
+            <div v-if="currentSeries" class="stat-item2 card currentSeries">
+              <h3 class="card-title">Current Series</h3>
+              <span class="value" style="width: 120px; border-radius: 100%; margin: 0 auto; margin-bottom: .5rem;">{{
+                currentStreak }}
+              </span>
+              <h4>DAY</h4>
+            </div>
             <div class="stat-item2 card rate">
               <h3>Completed Rate</h3>
               <div class="circular-progress" :style="{ width: size + 'px', height: size + 'px' }">
@@ -20,29 +27,17 @@
                 <div class="percentage">{{ completionRate }}%</div>
               </div>
             </div>
-            <div v-if="currentSeries" class="stat-item2 card currentSeries">
-              <h3 style="margin-top: 2rem; margin-bottom: 5rem;" class="card-title">Current Series</h3>
-              <span class="value" style="width: 120px; border-radius: 100%; margin: 0 auto; margin-bottom: .5rem;">{{
-                currentStreak }}
-              </span>
-              <h4>DAY</h4>
-            </div>
           </div>
-          <div style="margin-bottom: 2rem;" class="stat-item1">
+          <div class="stat-item4">
             <div class="stat-item3 card">
-              <h2 style="margin-bottom: 2rem;" class="card-title">Longest Series</h2>
+              <h3 class="card-title">Longest Series</h3>
               <div class="longest">
-                <div class="span">
-                  <span
-                    style="width: 200px; height: 200px; display: flex; align-items: center;justify-content: center; border-radius: 100% ;"
-                    class="value">{{
-                      longestStreak
-                    }}</span>
-                  <span style="font-size: 1.5rem;">DAY</span>
-                </div>
+                <span class="value" style="width: 120px; border-radius: 100%; margin: 0 auto;">{{
+                  longestStreak
+                }}</span>
+                <h4>DAY</h4>
                 <ColumnChart class="ColumnChart" :xAxis="myChart.xAxis" :series="myChart.series" :yAxis="myChart.yAxis"
-                  :plotOptions="myChart.plotOptions" :Chart="myChart.chart"
-                  style="width: 50%;height: auto; border-radius: 5px;" />
+                  :plotOptions="myChart.plotOptions" :Chart="myChart.chart" />
               </div>
             </div>
           </div>
@@ -78,7 +73,7 @@ export default defineComponent({
     },
     size: {
       type: Number,
-      default: 300,
+      default: 265,
     },
 
     currentSeries: {
