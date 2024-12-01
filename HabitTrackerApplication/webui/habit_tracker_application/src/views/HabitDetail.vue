@@ -18,7 +18,7 @@
           <HabitItem style="width: 80% !important;" v-if="selectedHabit" :habit="selectedHabit" :isEditing="true"
             :isEditBtn="false" :isCheckbox="false" @checkboxToggled="updateCheckedDates" :layout="layout"
             :is-update-visible-props="isUpdateVisible" @close="updateVisible" :delete-status="deleteStatus"
-            @delete="updateDelete" />
+            @delete="updateDelete" @updated-habit="updateHabit" />
           <button style="width:25%; height: 50px;" @click="openUpdate" class="btn btn-primary ">
             <i class="bi bi-arrow-repeat"></i>
             Update</button>
@@ -130,8 +130,6 @@ export default {
     const receivedData = ref("");
     const noteControl = ref(true);
 
-    console.log("receivedData", receivedData.value);
-
     watch(
       receivedData,
       (newValue) => {
@@ -220,6 +218,11 @@ export default {
       deleteStatus.value = newValue;
     });
 
+    watch(selectedHabit, (newValue) => {
+      selectedHabit.value = newValue;
+    });
+
+
     const openUpdate = () => {
       isUpdateVisible.value = !isUpdateVisible.value;
     };
@@ -242,6 +245,9 @@ export default {
     const updateDelete = (value) => {
       deleteStatus.value = !value;
       containerComponents.value = false;
+    };
+    const updateHabit = (value) => {
+      selectedHabit.value = value;
     };
 
     const alertSuccessFunction = () => {
@@ -333,7 +339,7 @@ export default {
       receivedData,
       longeStreakFunction,
       noteControl,
-
+      updateHabit,
     };
   },
 };

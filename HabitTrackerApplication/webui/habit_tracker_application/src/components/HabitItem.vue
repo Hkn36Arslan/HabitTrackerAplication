@@ -156,7 +156,7 @@ export default {
       return this.layout === 'alternative' ? 'alternative-layout' : 'default-layout';
     },
   },
-  emits: ["close", "delete", "checkboxToggled"],
+  emits: ["close", "delete", "checkboxToggled", "updatedHabit"],
 
   setup(props, { emit }) { // emit'i parametre olarak ekleyin
     const habitStore = useHabitStore();
@@ -172,8 +172,6 @@ export default {
     const successMessage = ref("");
     const errorMessage = ref("");
     const delete_Status = ref(props.deleteStatus);
-
-    console.log("props", delete_Status.value);
 
     watch(
       isUpdateVisible,
@@ -250,6 +248,7 @@ export default {
     const saveEdit = () => {
       habitStore.updateHabit(updatedHabit.value);
       isEditingLocal.value = false; //  Sonrasında güncelleme alanını gizler.
+      emit("updatedHabit", updatedHabit.value);
     };
 
     // işlemi kaydedip Home sayfasına yönlendirir.
@@ -262,7 +261,6 @@ export default {
     // habitin checkbox işaretlenmesini localStorage kaydetmek için habitStore gerekli  id ve değerler gönderiliyor.
     const saveCheckedState = () => {
       const currentCheckedState = habitStore.loadCheckedState(`habit-${props.habit.id}-checked`);
-      console.log("result:", habitStore.loadCheckedDates(props.habit.id));
 
       if (checked.value !== currentCheckedState) {
         // Check edilen durumu kaydet

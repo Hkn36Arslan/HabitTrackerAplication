@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { onMounted, computed, watch } from "vue";
+import { computed, watch } from "vue";
 import { useHabitStore } from "../stores/habitStore";
 import { VCalendar } from "v-calendar";
 
@@ -39,8 +39,6 @@ export default {
       return Array.from(dates);
     });
 
-    console.log("checkedDatesCalendar", checkedDatesCopy.value);
-
     // Takvim için özellikleri ayarla
     const calendarAttributes = computed(() => [
       {
@@ -59,12 +57,6 @@ export default {
     // İşaretli tarihler güncellendiğinde takvimi de güncelle
     watch(checkedDatesCopy, (newDates) => {
       habitStore.saveCheckedDates(props.habitId, new Set(newDates)); // Yeni tarihleri sakla
-      console.log("Updated checkedDates in calendar:", newDates);
-    });
-
-    // İlk yükleme sırasında kontrol
-    onMounted(() => {
-      console.log("Mounted, checked dates loaded:", checkedDatesCopy.value);
     });
 
     return {
