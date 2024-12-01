@@ -4,15 +4,19 @@
       <h5 style="margin-left: 1.4rem;" class="titlePage">Statistics</h5>
     </div>
     <div class="containerStats">
-      <h4>Statistics List Of Habits</h4>
       <div class="card habitListStats">
         <div v-for="habit in habits" :key="habit.id" class="col-12 mb-2 habitListStatsItem">
-          <!-- Her alışkanlık için HabitItem ve HabitStats bileşenlerini oluştur -->
-          <HabitItem :layout="layout" :habit="habit" :is-description="false" :is-edit-btn="false" :is-checkbox="false"
-            style="width:20%; height: 340px;" />
-          <HabitStats style="width:78%;" :layout="layout" :size="90" :habit="habit" :habit-id="habit.id"
-            :checked-dates="habitStore.checkedDates[habit.id]" :currentSeries="false" :title="false"
-            @longeStreak="handleData" />
+          <div class=" habitListStatsItemName">
+            <!-- Her alışkanlık için HabitItem ve HabitStats bileşenlerini oluştur -->
+            <HabitItem :layout="layout" :habit="habit" :is-description="false" :is-edit-btn="false" :is-checkbox="false"
+              style="width:100%;" />
+          </div>
+          <div class=" habitListStatsItemStats">
+            <HabitCalendar style="width:25%;" :layout="layout" :habit="habit" :habit-id="habit.id" />
+            <HabitStats style="width:80%;" :layout="layout" :size="310" :habit="habit" :habit-id="habit.id"
+              :checked-dates="habitStore.checkedDates[habit.id]" :currentSeries="false" :title="false"
+              @longeStreak="handleData" />
+          </div>
         </div>
       </div>
       <div class="theBest">
@@ -61,14 +65,16 @@
 <script>
 import HabitItem from '@/components/HabitItem.vue';
 import HabitStats from '@/components/HabitStats.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, onMounted, watchEffect } from 'vue';
 import { useHabitStore } from '../stores/habitStore';
+import HabitCalendar from '@/components/HabitCalendar.vue';
 
 export default {
   name: 'StatsView',
   components: {
     HabitItem,
     HabitStats,
+    HabitCalendar,
   },
   props: {
     size: {
@@ -97,7 +103,6 @@ export default {
     const habitStreak = ref(null);
     const habitName = ref(null);
     const layout = ref("alternative");
-
     let arrayObjects = []; // Objeleri tutan array
 
     // En uzun seri alma
@@ -114,15 +119,14 @@ export default {
         // Data.value'yi en uzun seriye sahip objeyle güncelle
         habitStreak.value = maxStreakObject.streak;
         habitName.value = maxStreakObject.name;
-
-        console.log("habitName:", habitName.value);
-        console.log("habitStreak:", habitStreak.value);
       }
     });
 
 
     // Alışkanlıkları computed ile reaktif olarak alın
     const habits = computed(() => habitStore.habits);
+
+    console.log("habits", habits.value);
 
     // En uzun seriye sahip alışkanlığı hesaplayın
     const longestSeriesHabit = computed(() => {
@@ -132,13 +136,36 @@ export default {
     });
 
 
+
     // En yüksek tamamlanma oranına sahip alışkanlığı hesaplayın
     const highestCompletionRateHabit = computed(() => {
-      return habits.value.reduce((highest, habit) => {
-        const completionRate = habitStore.getCompletionRate(habit.id);
-        return completionRate > (highest?.completionRate || 0) ? { ...habit, completionRate } : highest;
-      }, null);
+      const allHabits = habitStore.habits;
+      const rates = allHabits.map(habit => ({
+        ...habit,
+        completionRate: habitStore.getCompletionRate(habit.id)
+      }));
+
+      // En yüksek tamamlanma oranına sahip olanı bulma
+      return rates.reduce((max, habit) => habit.completionRate > max.completionRate ? habit : max, rates[0]);
     });
+
+
+    // Veriler değiştiğinde highestCompletionRateHabit'i güncellemek için watchEffect kullanma
+    watchEffect(() => {
+      if (habits.value.length > 0) {
+        highestCompletionRateHabit.value; // Bu, computed değerini günceller
+        console.log(highestCompletionRateHabit.value);
+      }
+    });
+
+    onMounted(() => {
+
+      habitStore.loadHabits();  // Verileri yüklemek için store'dan metodu çağırıyoruz
+      habitStore.loadCheckedDates(); // Eğer checkedDates de varsa bunu da yükle
+      habitStore.loadNotes(); // Notlar varsa bunları da yükleyin
+
+    });
+
     return {
       habits,
       longestSeriesHabit,

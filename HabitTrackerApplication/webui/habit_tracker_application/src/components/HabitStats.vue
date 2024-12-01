@@ -12,7 +12,6 @@
               <h4>DAY</h4>
             </div>
             <div class="stat-item2 card rate">
-              <h3>Completed Rate</h3>
               <div class="circular-progress" :style="{ width: size + 'px', height: size + 'px' }">
                 <!-- SVG Çizimi -->
                 <svg :width="size" :height="size" viewBox="0 0 36 36" class="circular-chart">
@@ -24,7 +23,10 @@
                     d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
                 </svg>
                 <!-- Yüzdelik oran -->
-                <div class="percentage">{{ completionRate }}%</div>
+                <div class="percentage">
+                  <span>Completed Rate</span><br>
+                  {{ completionRate }}%
+                </div>
               </div>
             </div>
           </div>
@@ -69,11 +71,11 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: '#2dce89',
+      default: '#7267f05e',
     },
     size: {
       type: Number,
-      default: 265,
+      default: 310,
     },
 
     currentSeries: {
@@ -96,6 +98,8 @@ export default defineComponent({
   },
   setup(props, { emit }) {
     const habitStore = useHabitStore();
+
+
     // Work with a local copy of checkedDates to avoid mutating the prop
     const checkedDatesCopy = computed(() => {
       const dates = habitStore.checkedDates[props.habitId] || new Set();
@@ -106,8 +110,9 @@ export default defineComponent({
     const totalDaysCompleted = computed(() => checkedDatesCopy.value.length);
 
     const completionRate = computed(() => {
-      const rate = ((checkedDatesCopy.value.length / 30) * 100);
-      return rate % 1 === 0 ? rate : rate.toFixed(2);
+      const totalCompleted = checkedDatesCopy.value.length || 0;
+      const rate = totalCompleted / 30 * 100;
+      return isNaN(rate) || rate === 0 ? 0 : rate.toFixed(0); // Sayı değilse veya 0 ise varsayılan değeri döndür
     });
 
     const progress = completionRate;

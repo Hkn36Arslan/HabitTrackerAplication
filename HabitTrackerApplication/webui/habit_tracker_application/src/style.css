@@ -381,37 +381,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 /* ************************* Home Page End ********************** */
 
 /* ************************* Detail Page Start ********************** */
-/* Basit takvim tasarımının genel yapısı */
-.simple-calendar {
-  width: 100%;
-  font-family: Arial, sans-serif;
-  border-collapse: collapse;
-}
 
-.simple-calendar th,
-.simple-calendar td {
-  padding: 10px;
-  text-align: center;
-}
-
-.simple-calendar th {
-  background-color: #f1f1f1;
-  color: #333;
-  font-weight: bold;
-}
-
-.simple-calendar td {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  cursor: pointer;
-}
-
-.simple-calendar td:hover {
-  background-color: #f9f9f9;
-}
-
-
-/* ********************************************************** */
 .detailPage {
   display: flex;
   flex-direction: column;
@@ -685,14 +655,23 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   border: none !important;
 }
 
+******************** Calendar End ************************ */
+/* ******************** HabitStats Start ************************ */
+
+/* ******************** Default Layout ************************* */
+
+.default-layout {
+  width: 100% !important;
+}
+
 /* ******************** Calendar Start ********************** */
-.totalDays {
+.default-layout .totalDays {
   text-align: center;
   color: var(--text-color);
 }
 
 /* Haftanın her bir günü */
-.calendar {
+.default-layout .calendar {
   width: 100%;
   border: none !important;
   border-radius: 5px;
@@ -702,16 +681,16 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 }
 
-.vc-day-content {
+.default-layout .vc-day-content {
   font-size: 1.2rem !important;
 }
 
-.vc-weekday {
+.default-layout .vc-weekday {
   font-size: 1.2rem !important;
   text-decoration: underline;
 }
 
-.vc-container {
+.default-layout .vc-container {
   background-color: transparent !important;
   width: 100% !important;
   color: var(--text-color) !important;
@@ -720,43 +699,43 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   margin-top: 1rem !important;
 }
 
-.vc-header {
+.default-layout .vc-header {
   margin-bottom: 1.5rem;
 }
 
-.vc-title-wrapper {
+.default-layout .vc-title-wrapper {
   background-color: transparent !important;
   margin-bottom: 3rem !important;
 }
 
-.vc-title {
+.default-layout .vc-title {
   background-color: transparent !important;
   font-size: 1.5rem;
 }
 
-.vc-title-wrapper span {
+.default-layout .vc-title-wrapper span {
   color: var(--text-color) !important;
   border: none !important;
 }
 
-.vc-arrow {
+.default-layout .vc-arrow {
   border-radius: 50% !important;
   background-color: var(--primary-color) !important;
 }
 
-.vc-arrow:focus {
+.default-layout .vc-arrow:focus {
   color: var(--text-color) !important;
 }
 
 
-.vc-highlight {
+.default-layout .vc-highlight {
   border-radius: 50%;
   border: none !important;
   background-color: var(--primary-color);
 }
 
 /* İşaretli tarihlerde tik işareti eklemek */
-.vc-highlight::after {
+.default-layout .vc-highlight::after {
   content: '✔';
   position: absolute;
   top: 50%;
@@ -769,16 +748,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 
 
 
-/* ******************** Calendar End ************************ */
-
-/* ******************** HabitStats Start ************************ */
-
-/* ******************** Default Layout ************************* */
-
-.default-layout {
-  width: 100%;
-}
-
+/*
 /* *************************  HabitItem Start ********************** */
 .router {
   text-decoration: none;
@@ -937,6 +907,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
   justify-content: flex-start;
   position: relative;
   border: none !important;
+  padding: 1rem !important;
 }
 
 .default-layout .Item .description {
@@ -1077,8 +1048,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .highcharts-background {
-  fill: transparent !important;
-
+  fill: var(--card-text) !important;
 }
 
 .highcharts-xaxis {
@@ -1182,9 +1152,13 @@ text {
 
 .default-layout .percentage {
   position: absolute;
-  font-size: 1.7rem;
-  font-weight: bold;
+  font-size: 3rem;
   color: #f72d66;
+}
+
+.default-layout .percentage span {
+  color: var(--text-color);
+  font-size: 1.3rem;
 }
 
 .default-layout .rate {
@@ -1249,24 +1223,108 @@ text {
 
 /* *************************  HabitItem Start ********************** */
 
-.alternative-layout .cardItem {
-  background-color: greenyellow !important;
+/* ******************** Calendar Start ********************** */
+
+.alternative-layout .totalDays {
+  text-align: center;
+  color: var(--text-color);
+}
+
+/* Haftanın her bir günü */
+.alternative-layout .calendar {
   width: 100%;
-  margin: 0 auto;
+  border: none !important;
+  border-radius: 5px;
+  margin-top: 2rem;
+  background-color: transparent !important;
+
+}
+
+.alternative-layout .vc-day-content {
+  font-size: 1.2rem !important;
+}
+
+.alternative-layout .vc-weekday {
+  font-size: 1.2rem !important;
+  text-decoration: underline;
+}
+
+.alternative-layout .vc-container {
+  background-color: transparent !important;
+  width: 100% !important;
+  color: var(--text-color) !important;
+  border: none !important;
+  height: 100% !important;
+  margin-top: 1rem !important;
+}
+
+.alternative-layout .vc-header {
+  margin-bottom: 1.5rem;
+}
+
+.alternative-layout .vc-title-wrapper {
+  background-color: transparent !important;
+  margin-bottom: 3rem !important;
+}
+
+.alternative-layout .vc-title {
+  background-color: transparent !important;
+  font-size: 1.5rem;
+}
+
+.alternative-layout .vc-title-wrapper span {
+  color: var(--text-color) !important;
+  border: none !important;
+}
+
+.alternative-layout .vc-arrow {
+  border-radius: 50% !important;
+  background-color: var(--primary-color) !important;
+}
+
+.alternative-layout .vc-arrow:focus {
+  color: var(--text-color) !important;
+}
+
+
+.alternative-layout .vc-highlight {
+  border-radius: 50%;
+  border: none !important;
+  background-color: var(--primary-color);
+}
+
+/* İşaretli tarihlerde tik işareti eklemek */
+.alternative-layout .vc-highlight::after {
+  content: '✔';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgb(44, 202, 44);
+  /* Yeşil renk */
+  font-size: 1.9rem;
+}
+
+.alternative-layout .itemHabit {
+  width: 100% !important;
+  background-color: transparent !important;
+}
+
+.alternative-layout .cardItem {
+  background-color: transparent !important;
+  width: 100% !important;
   color: var(--text-color) !important;
   border: none !important;
   gap: 1rem !important;
+  height: 5vh;
+
 }
 
 .alternative-layout .Item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: hotpink;
   border-radius: 5px;
-  box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.3);
-  width: 90%;
-  height: 346px;
+  width: 100%;
+  background-color: transparent;
+  border: none !important;
 }
 
 .alternative-layout .checkbox {
@@ -1276,16 +1334,12 @@ text {
 }
 
 .alternative-layout .name {
-  background-color: var(--bg-color) !important;
+  background-color: transparent !important;
   color: var(--text-color) !important;
   width: 100%;
-  height: 15vh !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row !important;
-  position: relative;
+  text-align: left;
   border: none !important;
+  padding: 2rem;
 }
 
 .alternative-layout .name i {
@@ -1353,14 +1407,12 @@ text {
 
 .alternative-layout .stat-item1 {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0;
+  justify-content: center;
+  width: 30%;
+  padding: 0 !important;
   background-color: transparent;
-  height: auto;
-  gap: 0.5rem;
+  height: 50vh;
 }
 
 .alternative-layout .stat-item2 {
@@ -1372,47 +1424,70 @@ text {
 }
 
 .alternative-layout .stat-item3 {
-  width: 100% !important;
-  height: 346px !important;
-  background-color: var(--bg-color) !important;
+  width: 100%;
+  height: auto !important;
+  background-color: transparent !important;
   color: var(--text-color) !important;
   border: none !important;
-  box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.3);
-  position: relative;
-  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50vh !important;
 }
 
 .alternative-layout .stat-item3 h5 {
-  top: 2rem;
-  margin-left: 11.5rem;
-  position: absolute;
-  z-index: 1000;
-  color: #242c49e0;
+  margin-top: 3rem;
+  margin-bottom: 0.5rem;
 }
 
-.alternative-layout .stat-item3 .value {
-  top: 4rem;
-  margin-left: 20rem;
-  position: absolute;
-  z-index: 1000;
-  width: 100%;
-  border-radius: 100%;
-  margin: 0 auto;
-  margin-bottom: 0.1rem;
-  font-size: 2rem;
-  background-color: transparent;
-  color: #f72d66;
+
+.alternative-layout .stat-item4 {
+  display: flex;
+  align-items: center;
+  justify-content: centert;
+  width: 70%;
+  background-color: transparent !important;
+  height: 50vh;
 }
 
 .alternative-layout .value {
-  width: 100px;
-  margin: 0 auto;
-  border-radius: 100%;
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  font-size: 2rem !important;
 }
 
-.alternative-layout .day {
-  width: 48%;
+.alternative-layout .longest {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column !important;
+  width: 100%;
+  margin-bottom: 3rem;
 }
+
+.alternative-layout .longest span {
+  color: #f72d66;
+  font-size: 2rem !important;
+  background-color: transparent;
+}
+
+.alternative-layout .longest h4 {
+  display: none;
+}
+
+.alternative-layout .highcharts-background {
+  fill: var() !important;
+  height: 50vh;
+}
+
+.alternative-layout .highcharts-xaxis {
+  display: none !important;
+}
+
+.alternative-layout .highcharts-grid-line {
+  display: none !important;
+}
+
 
 /* ************************ Toplam Gün ******************* */
 .alternative-layout .progress-bar-container {
@@ -1477,23 +1552,25 @@ text {
 
 .alternative-layout .percentage {
   position: absolute;
-  font-weight: bold;
   color: #f72d66;
+  font-size: 3rem;
+}
+
+.alternative-layout .percentage span {
+  color: var(--text-color);
+  font-size: 1.3rem;
 }
 
 .alternative-layout .rate {
-  width: 50%;
-  height: 346px;
+  width: 100% !important;
+  height: 50vh !important;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: transparent !important;
 }
 
 /* ************************ Güncel Seri **************************** */
-
-.alternative-layout .currentSeries {
-  width: 25%;
-}
 
 /* ******************************************************** */
 .alternative-layout .stats p {
@@ -1524,53 +1601,25 @@ text {
   align-items: center;
   justify-content: center;
   color: var(--text-color);
+  margin-top: 2rem;
 }
 
 .habitListStats {
-  width: 97%;
-  height: 50vh !important;
+  width: 80%;
   background-color: transparent !important;
   border: none !important;
   border-radius: 5px;
   text-align: center;
   color: var(--text-color) !important;
-  overflow-y: auto;
   display: flex;
   flex-direction: column !important;
   align-items: center;
   justify-content: flex-start;
-  gap: 2rem !important;
+  gap: 1rem !important;
   position: relative;
-  margin-bottom: 2rem;
-}
-
-/* Sağ kenara animasyonlu bir el simgesi ekleyin */
-.habitListStats::after {
-  content: "👇";
-  /* El simgesi */
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 20px;
-  pointer-events: none;
-  animation: bounce 1.5s infinite;
-  /* Animasyon ekle */
-}
-
-/* Yukarı-aşağı hareket için animasyon tanımla */
-@keyframes bounce {
-
-  0%,
-  100% {
-    transform: translateY(-50%) translateY(0);
-    /* Başlangıç ve bitiş konumu */
-  }
-
-  50% {
-    transform: translateY(-50%) translateY(10px);
-    /* Elin aşağı doğru hareketi */
-  }
+  margin-bottom: 2rem !important;
+  padding: 0 !important;
+  margin-top: 1rem;
 }
 
 .habitListStats::-webkit-scrollbar {
@@ -1591,15 +1640,32 @@ text {
 .habitListStatsItem {
   display: flex;
   align-items: center;
+  flex-direction: column !important;
+  justify-content: flex-start;
+  background-color: var(--bg-color) !important;
+  border-radius: 10px;
+  width: 100% !important;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.habitListStatsItemName {
+  width: 100%;
+}
+
+.habitListStatsItemStats {
+  width: 100%;
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
   justify-content: space-between;
   background-color: transparent;
-  border-radius: 10px;
-  width: 95% !important;
-  margin-top: 2rem;
+  gap: 2rem;
 }
 
 .theBest {
-  width: 92%;
+  width: 80%;
   height: 24vh;
   background-color: transparent;
   border: none;
@@ -1609,6 +1675,7 @@ text {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
 .theBest .longestSeries {

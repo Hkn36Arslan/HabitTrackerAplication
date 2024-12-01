@@ -1,6 +1,6 @@
 <template>
   <div :class="layoutClass">
-    <div>
+    <div class="itemHabit">
       <!-- Modal Arka Plan Karartması -->
       <div v-if="isUpdateVisibleProps" class="modal-backdrop fade show"></div>
 
@@ -83,7 +83,8 @@
           </div>
           <div class="group">
             <div class="card name">
-              <h2 style="font-family: 'Open Sans', sans-serif; margin-left: 1rem;">{{ habit.name }}</h2>
+              <h2 style="font-family: 'Open Sans', sans-serif;margin-top: .5rem;">{{ habit.name }}
+              </h2>
             </div>
             <div class="card description" v-if="isDescription">
               <p>

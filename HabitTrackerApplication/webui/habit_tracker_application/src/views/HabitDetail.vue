@@ -79,9 +79,10 @@
           </div>
         </div>
       </div>
-      <HabitCalendar v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" :data="receivedData" />
-      <HabitStats v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId" @updateData="longeStreakFunction"
-        style="margin-top: 2rem;" />
+      <HabitCalendar :layout="layout" style="width: 100% !important;" v-if="selectedHabit" :habit="selectedHabit"
+        :habit-id="habitId" />
+      <HabitStats :layout="layout" v-if="selectedHabit" :habit="selectedHabit" :habit-id="habitId"
+        style="margin-top: 2rem; width: 100% !important;" />
     </div>
 
   </div>
@@ -127,15 +128,9 @@ export default {
     const deleteMessage = ref("");
     const textareaMessage = ref("");
     const containerComponents = ref(true);
-    const receivedData = ref("");
+
     const noteControl = ref(true);
 
-    watch(
-      receivedData,
-      (newValue) => {
-        receivedData.value = newValue;
-      }
-    );
     watch(
       noteControl,
       (newValue) => {
@@ -268,10 +263,6 @@ export default {
     };
 
 
-    const longeStreakFunction = (data) => {
-
-      receivedData.value = data;
-    }
     onMounted(() => {
       const habitId = Number(route.params.habitId);
       selectedHabit.value = habitStore.getHabitById(habitId);
@@ -336,8 +327,6 @@ export default {
       deleteMessage,
       textareaMessage,
       containerComponents,
-      receivedData,
-      longeStreakFunction,
       noteControl,
       updateHabit,
     };
