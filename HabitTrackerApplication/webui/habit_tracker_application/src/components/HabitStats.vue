@@ -32,12 +32,11 @@
           </div>
           <div class="stat-item4">
             <div class="stat-item3 card">
-              <h3 class="card-title">Longest Series</h3>
               <div class="longest">
                 <span class="value" style="width: 120px; border-radius: 100%; margin: 0 auto;">{{
                   longestStreak
-                }}</span>
-                <h4>DAY</h4>
+                }}</span> DAY
+                <h3 class="card-title">Longest Series</h3>
                 <ColumnChart class="ColumnChart" :xAxis="myChart.xAxis" :series="myChart.series" :yAxis="myChart.yAxis"
                   :plotOptions="myChart.plotOptions" :Chart="myChart.chart" />
               </div>

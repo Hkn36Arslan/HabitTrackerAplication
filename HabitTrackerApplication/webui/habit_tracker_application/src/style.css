@@ -790,7 +790,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .default-layout .cardItem {
-  background-color: transparent !important;
+  background-color: var(--bg-color) !important;
   width: 100%;
   margin: 0 auto;
   border: none !important;
@@ -877,7 +877,7 @@ input[type="date"].form-control::-webkit-calendar-picker-indicator {
 }
 
 .default-layout .Item {
-  background-color: var(--bg-color);
+  background-color: transparent;
   height: 412px;
   width: 100%;
   display: flex !important;
@@ -1471,12 +1471,8 @@ text {
   background-color: transparent;
 }
 
-.alternative-layout .longest h4 {
-  display: none;
-}
 
 .alternative-layout .highcharts-background {
-  fill: var() !important;
   height: 50vh;
 }
 
@@ -1648,6 +1644,8 @@ text {
   margin-top: 1rem;
   margin-bottom: 1rem;
   gap: 1rem;
+  box-shadow: 0 0.125rem 0.375rem 0 rgba(114, 103, 240, 0.507);
+
 }
 
 .habitListStatsItemName {
@@ -1666,7 +1664,6 @@ text {
 
 .theBest {
   width: 80%;
-  height: 24vh;
   background-color: transparent;
   border: none;
   border-radius: 5px;
@@ -1680,11 +1677,12 @@ text {
 
 .theBest .longestSeries {
   width: 49%;
+  height: 30vh !important;
   background-color: var(--bg-color);
   border: none;
   border-radius: 5px;
-  height: 24vh;
-  box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0.125rem 0.375rem 0 rgba(114, 103, 240, 0.507);
+  margin-bottom: 2rem !important;
 }
 
 .theBestItem {
@@ -1699,8 +1697,9 @@ text {
   background-color: var(--bg-color);
   border: none;
   border-radius: 5px;
-  height: 24vh;
-  box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.3);
+  height: 30vh;
+  box-shadow: 0 0.125rem 0.375rem 0 rgba(114, 103, 240, 0.507);
+  margin-bottom: 2rem !important;
 }
 
 .confetti-icon {
