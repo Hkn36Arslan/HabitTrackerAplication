@@ -19,7 +19,7 @@
             :isEditBtn="false" :isCheckbox="false" @checkboxToggled="updateCheckedDates" :layout="layout"
             :is-update-visible-props="isUpdateVisible" @close="updateVisible" :delete-status="deleteStatus"
             @delete="updateDelete" @updated-habit="updateHabit" />
-          <button style="width:25%; height: 50px;" @click="openUpdate" class="btn btn-primary ">
+          <button style="width:25%; height: 50px; margin-left: 1rem;" @click="openUpdate" class="btn btn-primary ">
             <i class="bi bi-arrow-repeat"></i>
             Update</button>
           <!-- update,cancel ve delete butonları -->
@@ -93,7 +93,7 @@
 import HabitItem from "@/components/HabitItem.vue";
 import HabitCalendar from "@/components/HabitCalendar.vue";
 import { ref, onMounted, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useHabitStore } from "../stores/habitStore";
 import HabitStats from "@/components/HabitStats.vue";
 
@@ -109,7 +109,7 @@ export default {
   },
   setup(props) {
     const habitStore = useHabitStore();
-    const route = useRoute();
+    const router = useRouter();
     const selectedHabit = ref(null);
     const checkedDates = ref([]);
     const layout = ref("default");
@@ -231,10 +231,8 @@ export default {
       deleteStatus.value = !deleteStatus.value;
       textareaMessage.value = ""
       deleteMessage.value = "Deleted !"
-      setTimeout(() => {
-        alertDanger.value = !alertDanger.value;
-      }, 1000);
-
+      router.push({ name: 'Home' });
+      alertDanger.value = !alertDanger.value;
     };
 
     const updateDelete = (value) => {
@@ -262,9 +260,10 @@ export default {
       alertDangerDelete.value = !alertDangerDelete.value;
     };
 
-
     onMounted(() => {
-      const habitId = Number(route.params.habitId);
+      habitStore.loadHabits();  // Verileri yüklemek için store'dan metodu çağırıyoruz
+      habitStore.loadCheckedDates(); // Eğer checkedDates de varsa bunu da yükle
+      const habitId = Number(props.habitId);
       selectedHabit.value = habitStore.getHabitById(habitId);
       notes.value = habitStore.getNotesByHabitId(props.habitId);
       if (selectedHabit.value) {

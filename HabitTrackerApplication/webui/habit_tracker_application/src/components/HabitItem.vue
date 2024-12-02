@@ -9,7 +9,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header border-bottom">
-              <h5 id="modalAddHabitLabel" class="modal-title">Add New Habits</h5>
+              <h5 id="modalAddHabitLabel" class="modal-title">Update Habits</h5>
               <button type="button" class="closeBtn" @click="openUpdate" aria-label="Close">✕</button>
             </div>
             <div class="modal-body">
@@ -209,7 +209,7 @@ export default {
     // Bu fonksiyon ile güncelleme formunun görünürlüğü sağlanıyor.
     const openUpdate = () => {
       emit("close", isUpdateVisible.value);
-      loadCheckedState();
+      validateForm();
     };
 
     const validateForm = () => {
@@ -254,8 +254,8 @@ export default {
 
     // işlemi kaydedip Home sayfasına yönlendirir.
     const cancelEdit = () => {
-      saveEdit();
       emit("close", isUpdateVisible.value);
+      validateForm();
     };
 
 

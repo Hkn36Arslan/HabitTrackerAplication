@@ -21,27 +21,25 @@
       </div>
       <div class="theBest">
         <div class="longestSeries">
-          <h5 style="margin-top: 1rem;">Habit With The Longest Series</h5>
+          <div class="name-container">
+            <div class="decorative-name">{{ habitName }}</div>
+          </div>
           <div class="theBestItem">
-            <div class="confetti-icon">🎉</div>
             <div class="theBestItem1">
-              <div class="name-container">
-                <div class="decorative-name">🎉 {{ habitName }} 🎉</div>
-              </div>
               <div class="trophy">
                 🏆
-                <span class="streak-value"><span style="font-size: .5rem;">Longest Series</span><br>{{ habitStreak
+                <span class="streak-value">{{ habitStreak
                   }}</span>
               </div>
+              <h4 style="margin-top: 1rem;">Habit With The Longest Series</h4>
+
             </div>
-            <div class="confetti-icon">🎉</div>
           </div>
         </div>
         <div class="highestCompletionRate">
-          <h5 style="margin-top: 1rem;">Highest Completion Rate</h5>
           <div class="theBestItem">
             <div class="name-container">
-              <div class="decorative-name">🎉 {{ highestCompletionRateHabit?.name || 0 }} 🎉</div>
+              <div class="decorative-name">{{ highestCompletionRateHabit?.name || 0 }} </div>
             </div>
             <div class="rateStats">
               <div class="circular-progress">
@@ -51,9 +49,10 @@
                     :stroke-dashoffset="progressOffset" :r="radius" :cx="size / 2" :cy="size / 2" />
                 </svg>
                 <div class="progress-value">
-                  {{ (highestCompletionRateHabit?.completionRate).toFixed(2) || 0 }}%
+                  {{ (highestCompletionRateHabit?.completionRate).toFixed(0) || 0 }}%
                 </div>
               </div>
+              <h4 style="margin-top: 1rem;">Highest Completion Rate</h4>
             </div>
           </div>
         </div>
