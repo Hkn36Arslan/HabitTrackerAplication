@@ -209,9 +209,24 @@ export default {
     // Bu fonksiyon ile güncelleme formunun görünürlüğü sağlanıyor.
     const openUpdate = () => {
       emit("close", isUpdateVisible.value);
-      validateForm();
+      reset();
     };
 
+    const newHabit = ref({
+      id: null,
+      name: "",
+      description: "",
+      startDate: "",
+      goal: "",
+    });
+
+    const reset = () => {
+      newHabit.value = { id: null, name: "", description: "", startDate: "", goal: "" };
+      habitNameError.value = "";
+      habitStartDateError.value = "";
+      successMessage.value = "";
+      errorMessage.value = "";
+    };
     const validateForm = () => {
       habitNameError.value = "";
       habitStartDateError.value = "";
@@ -255,7 +270,7 @@ export default {
     // işlemi kaydedip Home sayfasına yönlendirir.
     const cancelEdit = () => {
       emit("close", isUpdateVisible.value);
-      validateForm();
+      reset();
     };
 
 
